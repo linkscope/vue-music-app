@@ -3,17 +3,25 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 13:51:49
+ * @LastEditTime: 2021-01-28 17:39:41
  */
-import { defineComponent } from 'vue'
+import { defineComponent, Fragment } from 'vue'
+import { RouterView } from 'vue-router'
 
-import Icon from '@/components/Icon'
+import Header from '@/components/Header'
+import Tabs from '@/components/Tabs'
 
 export default defineComponent({
   name: 'App',
   setup() {
     return () => {
-      return <Icon icon="kuaijin" />
+      return (
+        <Fragment>
+          <Header />
+          <Tabs />
+          <RouterView />
+        </Fragment>
+      )
     }
   }
 })

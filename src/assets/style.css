@@ -5,6 +5,7 @@ html {
     'Droid Sans Fallback';
   user-select: none;
   -webkit-tap-highlight-color: transparent;
-  background: '#333';
-  color: '#fff';
+  background: #fff;
+  color: #666;
+  height: 100%;
 }

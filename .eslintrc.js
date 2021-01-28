@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 14:42:08
+ * @LastEditTime: 2021-01-28 18:26:59
  */
 module.exports = {
   root: true,
@@ -24,6 +24,7 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'prettier/prettier': 'off',
-    '@typescript-eslint/ban-ts-ignore': 'off'
+    '@typescript-eslint/ban-ts-ignore': 'off',
+    '@typescript-eslint/interface-name-prefix': 'off'
   }
 }
