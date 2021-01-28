@@ -846,6 +846,25 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@better-scroll/core@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.npm.taobao.org/@better-scroll/core/download/@better-scroll/core-2.1.4.tgz#0ba721cb2e6a98b248ed703690e9b877b0a487d1"
+  integrity sha1-C6chyy5qmLJI7XA2kOm4d7Ckh9E=
+  dependencies:
+    "@better-scroll/shared-utils" "^2.1.4"
+
+"@better-scroll/shared-utils@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.npm.taobao.org/@better-scroll/shared-utils/download/@better-scroll/shared-utils-2.1.4.tgz#2353dab63e433aaf452cb4228d38d76c2174ed06"
+  integrity sha1-I1Patj5DOq9FLLQijTjXbCF07QY=
+
+"@better-scroll/slide@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.npm.taobao.org/@better-scroll/slide/download/@better-scroll/slide-2.1.4.tgz#04f606c4c2f95c853b7530214b11f0fc9b93e1e8"
+  integrity sha1-BPYGxML5XIU7dTAhSxHw/JuT4eg=
+  dependencies:
+    "@better-scroll/core" "^2.1.4"
+
 "@hapi/address@2.x.x":
   version "2.1.4"
   resolved "https://registry.npm.taobao.org/@hapi/address/download/@hapi/address-2.1.4.tgz?cache=0&sync_timestamp=1603525310359&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40hapi%2Faddress%2Fdownload%2F%40hapi%2Faddress-2.1.4.tgz#5d67ed43f3fd41a69d4b9ff7b56e7c0d1d0a81e5"
@@ -2076,6 +2095,13 @@ aws4@^1.8.0:
   version "1.11.0"
   resolved "https://registry.npm.taobao.org/aws4/download/aws4-1.11.0.tgz?cache=0&sync_timestamp=1604101385256&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faws4%2Fdownload%2Faws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha1-1h9G2DslGSUOJ4Ta9bCUeai0HFk=
+
+axios@^0.21.1:
+  version "0.21.1"
+  resolved "https://registry.npm.taobao.org/axios/download/axios-0.21.1.tgz?cache=0&sync_timestamp=1608609419814&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Faxios%2Fdownload%2Faxios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
+  integrity sha1-IlY0gZYvTWvemnbVFu8OXTwJsrg=
+  dependencies:
+    follow-redirects "^1.10.0"
 
 babel-code-frame@^6.22.0:
   version "6.26.0"
@@ -4319,7 +4345,7 @@ flush-write-stream@^1.0.0:
     inherits "^2.0.3"
     readable-stream "^2.3.6"
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   version "1.13.2"
   resolved "https://registry.npm.taobao.org/follow-redirects/download/follow-redirects-1.13.2.tgz#dd73c8effc12728ba5cf4259d760ea5fb83e3147"
   integrity sha1-3XPI7/wScoulz0JZ12DqX7g+MUc=

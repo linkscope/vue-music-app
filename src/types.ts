@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 18:26:10
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 18:28:42
+ * @LastEditTime: 2021-01-28 21:55:21
  */
 import { RouteLocation, NavigationFailure } from 'vue-router'
 
@@ -18,4 +18,10 @@ export interface IRouterLinkSlot {
   isActive: import('vue').ComputedRef<boolean>
   isExactActive: import('vue').ComputedRef<boolean>
   navigate: (e?: MouseEvent) => Promise<void | NavigationFailure>
+}
+
+export interface IBanner {
+  bannerId: string
+  pic: string
+  url: string | null
 }
