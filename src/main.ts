@@ -7,6 +7,7 @@
  */
 import { createApp } from 'vue'
 import FastClick from 'fastclick'
+import VueLazyLoad from 'vue3-lazyload'
 
 import router from './router'
 import store from './store'
@@ -21,4 +22,5 @@ FastClick.attach(document.body)
 createApp(App)
   .use(store)
   .use(router)
+  .use(VueLazyLoad)
   .mount('#app')

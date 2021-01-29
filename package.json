@@ -13,6 +13,7 @@
     "@better-scroll/slide": "^2.1.4",
     "@types/fastclick": "^1.0.29",
     "axios": "^0.21.1",
+    "cnchar": "^3.0.1",
     "core-js": "^3.6.5",
     "fastclick": "^1.0.6",
     "jss": "^10.5.1",
@@ -21,6 +22,7 @@
     "vue": "^3.0.0",
     "vue-jss": "^0.0.4",
     "vue-router": "^4.0.0-0",
+    "vue3-lazyload": "^0.2.2-beta",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {

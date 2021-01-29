@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-29 13:45:19
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 15:56:04
+ * @LastEditTime: 2021-01-29 19:34:25
  */
 import { defineComponent, PropType } from 'vue'
 import { createUseStyles } from 'vue-jss'
@@ -64,7 +64,7 @@ export default defineComponent({
           {recommendList.map((item) => (
             <li class={classes.item}>
               <div class={classes.pic}>
-                <img src={item.picUrl} alt="" width="60" />
+                <img v-lazy={item.picUrl} alt="" width="60" />
               </div>
               <div class={classes.desc}>
                 <h2 class={classes.descTitle}>{item.name}</h2>

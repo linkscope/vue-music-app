@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:56:52
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 14:02:55
+ * @LastEditTime: 2021-01-29 19:25:38
  */
 export enum Color {
   '$color-background' = '#222',

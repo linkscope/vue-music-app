@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 18:26:10
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 13:48:43
+ * @LastEditTime: 2021-01-29 18:31:42
  */
 import { RouteLocation, NavigationFailure } from 'vue-router'
 
@@ -31,4 +31,10 @@ export interface IRecommend {
   name: string
   copywriter: string
   picUrl: string
+}
+
+export interface ISinger {
+  accountId: number
+  name: string
+  img1v1Url: string
 }

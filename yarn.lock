@@ -2769,6 +2769,18 @@ clone@^1.0.2:
   resolved "https://registry.npm.taobao.org/clone/download/clone-1.0.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fclone%2Fdownload%2Fclone-1.0.4.tgz#da309cc263df15994c688ca902179ca3c7cd7c7e"
   integrity sha1-2jCcwmPfFZlMaIypAheco8fNfH4=
 
+cnchar-types@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npm.taobao.org/cnchar-types/download/cnchar-types-3.0.1.tgz#be9840d145cc37053f946df7c96cc8240f420f32"
+  integrity sha1-vphA0UXMNwU/lG33yWzIJA9CDzI=
+
+cnchar@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npm.taobao.org/cnchar/download/cnchar-3.0.1.tgz#c96d5639357f84aa7c860d455de86a8192d895a9"
+  integrity sha1-yW1WOTV/hKp8hg1FXehqgZLYlak=
+  dependencies:
+    cnchar-types "^3.0.1"
+
 coa@^2.0.2:
   version "2.0.2"
   resolved "https://registry.npm.taobao.org/coa/download/coa-2.0.2.tgz#43f6c21151b4ef2bf57187db0d73de229e3e7ec3"
@@ -9262,6 +9274,11 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha1-HuO8mhbsv1EYvjNLsV+cRvgvWCU=
+
+vue3-lazyload@^0.2.2-beta:
+  version "0.2.2-beta"
+  resolved "https://registry.npm.taobao.org/vue3-lazyload/download/vue3-lazyload-0.2.2-beta.tgz#c75df1a8553b60fbfd8324d083cb0e71c94dd26d"
+  integrity sha1-x13xqFU7YPv9gyTQg8sOcclN0m0=
 
 vue@^3.0.0:
   version "3.0.5"

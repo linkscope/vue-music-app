@@ -7,7 +7,8 @@
  */
 enum Api {
   getBanner = '/api/banner',
-  getRecommendList = '/api/personalized'
+  getRecommendList = '/api/personalized',
+  getSingerList = '/api/top/artists'
 }
 
 export default Api
