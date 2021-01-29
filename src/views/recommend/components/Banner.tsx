@@ -10,7 +10,7 @@ import { Color } from '@/assets/variables'
  * @Author: linkscope
  * @Date: 2021-01-28 22:05:49
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 03:01:26
+ * @LastEditTime: 2021-01-29 13:37:19
  */
 const useStyle = createUseStyles({
   container: {
@@ -137,7 +137,7 @@ export default defineComponent({
         setTimeout(() => {
           computeSliderWidth()
           initScroll()
-        }, 17)
+        }, 20)
       }
     })
 

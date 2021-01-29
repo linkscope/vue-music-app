@@ -12,8 +12,8 @@ export enum Color {
   '$color-dialog-background' = '#666',
   '$color-theme' = '#d93f30',
   '$color-theme-dark' = 'rgba(255, 0, 0, 0.5)',
-  '$color-text' = '#fff',
-  '$color-text-dark' = 'rgba(255, 255, 255, 0.3)',
+  '$color-text' = '#000',
+  '$color-text-dark' = 'rgba(0, 0, 0, .3)',
   '$color-text-light' = 'rgba(255, 255, 255, 0.5)',
   '$color-text-lighter' = 'rgba(255, 255, 255, 0.8)'
 }

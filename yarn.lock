@@ -853,6 +853,13 @@
   dependencies:
     "@better-scroll/shared-utils" "^2.1.4"
 
+"@better-scroll/scroll-bar@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.npm.taobao.org/@better-scroll/scroll-bar/download/@better-scroll/scroll-bar-2.1.4.tgz#ae3b2933d8cfb00016c4df78de902dd9633ac344"
+  integrity sha1-rjspM9jPsAAWxN943pAt2WM6w0Q=
+  dependencies:
+    "@better-scroll/core" "^2.1.4"
+
 "@better-scroll/shared-utils@^2.1.4":
   version "2.1.4"
   resolved "https://registry.npm.taobao.org/@better-scroll/shared-utils/download/@better-scroll/shared-utils-2.1.4.tgz#2353dab63e433aaf452cb4228d38d76c2174ed06"

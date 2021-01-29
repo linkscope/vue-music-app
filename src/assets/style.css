@@ -9,3 +9,14 @@ html {
   color: #666;
   height: 100%;
 }
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}

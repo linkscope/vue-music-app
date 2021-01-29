@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 18:26:10
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 21:55:21
+ * @LastEditTime: 2021-01-29 13:48:43
  */
 import { RouteLocation, NavigationFailure } from 'vue-router'
 
@@ -24,4 +24,11 @@ export interface IBanner {
   bannerId: string
   pic: string
   url: string | null
+}
+
+export interface IRecommend {
+  id: number
+  name: string
+  copywriter: string
+  picUrl: string
 }

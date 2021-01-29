@@ -3,11 +3,11 @@
  * @Author: linkscope
  * @Date: 2021-01-28 21:45:00
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 21:56:21
+ * @LastEditTime: 2021-01-29 13:49:10
  */
 import request from './request'
 import Api from './api'
-import { IBanner } from '@/types'
+import { IBanner, IRecommend } from '@/types'
 
 export function getBannerList(
   type: number
@@ -21,5 +21,14 @@ export function getBannerList(
     params: {
       type
     }
+  })
+}
+
+export function getRecommendList(): Promise<{
+  result: IRecommend[]
+}> {
+  return request({
+    url: Api.getRecommendList,
+    method: 'get'
   })
 }

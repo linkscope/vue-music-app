@@ -3,28 +3,49 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:31
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 22:25:22
+ * @LastEditTime: 2021-01-29 15:47:35
  */
 import { defineComponent, onMounted, ref } from 'vue'
 
-import { IBanner } from '@/types'
-import { getBannerList } from '@/api/recommend'
+import { IBanner, IRecommend } from '@/types'
+import { getBannerList, getRecommendList } from '@/api/recommend'
+import useStyle from './style'
 
 import Banner from './components/Banner'
+import RecommendList from './components/RecommendList'
+import ScrollView from '@/components/ScrollView'
 
 export default defineComponent({
   name: 'Recommend',
   setup() {
+    const classesRef = useStyle()
     const bannerListRef = ref<IBanner[]>([])
+    const recommendListRef = ref<IRecommend[]>([])
 
     onMounted(async () => {
-      const result = await getBannerList(2)
-      bannerListRef.value = result.banners
+      const bannerResult = await getBannerList(2)
+      const recommendListResult = await getRecommendList()
+      bannerListRef.value = bannerResult.banners
+      recommendListRef.value = recommendListResult.result
     })
 
     return () => {
+      const classes = classesRef.value
       const bannerList = bannerListRef.value
-      return <Banner bannerList={bannerList} />
+      const recommendList = recommendListRef.value
+      return (
+        <div class={classes.container}>
+          <ScrollView class={classes.scrollViewWrapper} data={recommendListRef.value}>
+            <div>
+              <div class={classes.bannerContainer}>
+                <Banner bannerList={bannerList} />
+              </div>
+              <h1 class={classes.recommendTitle}>热门歌单推荐</h1>
+              <RecommendList recommendList={recommendList} />
+            </div>
+          </ScrollView>
+        </div>
+      )
     }
   }
 })

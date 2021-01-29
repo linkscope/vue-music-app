@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 14:38:30
+ * @LastEditTime: 2021-01-29 16:02:35
  */
 import { createApp } from 'vue'
 import FastClick from 'fastclick'
