@@ -30,6 +30,12 @@ const style = createUseStyles({
     fontSize: Font['$font-size-small'],
     color: Color['$color-theme'],
     margin: 0
+  },
+  loadingContainer: {
+    position: 'absolute',
+    width: '100%',
+    top: '50%',
+    transform: 'translateY(-50%)'
   }
 })
 

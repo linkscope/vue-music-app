@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:31
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 15:47:35
+ * @LastEditTime: 2021-01-29 17:31:57
  */
 import { defineComponent, onMounted, ref } from 'vue'
 
@@ -14,6 +14,7 @@ import useStyle from './style'
 import Banner from './components/Banner'
 import RecommendList from './components/RecommendList'
 import ScrollView from '@/components/ScrollView'
+import Loading from '@/components/Loading'
 
 export default defineComponent({
   name: 'Recommend',
@@ -42,6 +43,9 @@ export default defineComponent({
               </div>
               <h1 class={classes.recommendTitle}>热门歌单推荐</h1>
               <RecommendList recommendList={recommendList} />
+            </div>
+            <div class={classes.scrollViewWrapper} v-show={!recommendList.length}>
+              <Loading />
             </div>
           </ScrollView>
         </div>
