@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-29 18:56:19
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 19:02:10
+ * @LastEditTime: 2021-02-02 15:55:33
  */
 import { createUseStyles } from 'vue-jss'
 
@@ -19,6 +19,13 @@ const style = createUseStyles({
     width: '100%',
     height: '100%',
     overflow: 'hidden'
+  },
+  shortcutWrapper: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: 'translateY(-50%)',
+    zIndex: 99
   }
 })
 

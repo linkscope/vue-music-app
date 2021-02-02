@@ -25,6 +25,8 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'prettier/prettier': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
-    '@typescript-eslint/interface-name-prefix': 'off'
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/no-non-null-assertion': 'off'
   }
 }

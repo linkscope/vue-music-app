@@ -10,7 +10,7 @@ import { Color } from '@/assets/variables'
  * @Author: linkscope
  * @Date: 2021-01-28 22:05:49
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 13:37:19
+ * @LastEditTime: 2021-02-02 15:14:27
  */
 const useStyle = createUseStyles({
   container: {
@@ -81,6 +81,10 @@ export default defineComponent({
     interval: {
       type: [Number, String] as PropType<number | string>,
       default: 3000
+    },
+    onBannerImgLoad: {
+      type: Function as PropType<() => void>,
+      default: () => ''
     }
   },
   setup(props) {
@@ -150,7 +154,7 @@ export default defineComponent({
             {bannerList.map((item) => (
               <div key={item.bannerId} class={classes.bannerItem}>
                 <a href={item.url || '#'}>
-                  <img src={item.pic} alt="" />
+                  <img src={item.pic} onLoad={props.onBannerImgLoad} alt="" />
                 </a>
               </div>
             ))}

@@ -1,13 +1,14 @@
 import { defineComponent, ref, renderSlot, PropType, onMounted, watch } from 'vue'
 import BScroll from '@better-scroll/core'
 import BScrollBar from '@better-scroll/scroll-bar'
+import { EaseItem } from '@better-scroll/shared-utils'
 
 /*
  * @Description:
  * @Author: linkscope
  * @Date: 2021-01-29 14:15:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 16:09:13
+ * @LastEditTime: 2021-02-02 16:17:14
  */
 
 BScroll.use(BScrollBar)
@@ -26,9 +27,17 @@ export default defineComponent({
     data: {
       type: Array as PropType<any[]>,
       default: () => []
+    },
+    listenScroll: {
+      type: Boolean as PropType<boolean>,
+      default: false
+    },
+    onScroll: {
+      type: Function as PropType<(x: number, y: number) => void>,
+      default: () => ''
     }
   },
-  setup(props, { slots }) {
+  setup(props) {
     const scrollViewInstance = ref<HTMLDivElement | null>(null)
     const scrollInstance = ref<BScroll | null>(null)
 
@@ -41,6 +50,12 @@ export default defineComponent({
         scrollY: true,
         scrollbar: true
       })
+
+      if (props.listenScroll) {
+        scrollInstance.value.on('scroll', (position: { x: number; y: number }) => {
+          props.onScroll(position.x, position.y)
+        })
+      }
     }
 
     onMounted(() => {
@@ -49,17 +64,59 @@ export default defineComponent({
       }, 20)
     })
 
+    const scrollTo = (
+      x: number,
+      y: number,
+      time?: number | undefined,
+      easing?: EaseItem | undefined,
+      extraTransform?:
+        | {
+            start: object
+            end: object
+          }
+        | undefined
+    ) => {
+      scrollInstance.value?.scrollTo.call(scrollInstance.value, x, y, time, easing, extraTransform)
+    }
+
+    const scrollToElement = (
+      el: string | HTMLElement,
+      time: number,
+      offsetX: number | boolean,
+      offsetY: number | boolean,
+      easing?: EaseItem | undefined
+    ) => {
+      scrollInstance.value?.scrollToElement.call(
+        scrollInstance.value,
+        el,
+        time,
+        offsetX,
+        offsetY,
+        easing
+      )
+    }
+
+    const onRefresh = () => {
+      scrollInstance.value?.refresh()
+    }
+
     watch(
       () => props.data,
       () => {
         setTimeout(() => {
-          scrollInstance.value!.refresh()
-        }, 500)
+          onRefresh()
+        }, 2000)
       }
     )
 
-    return () => {
-      return <div ref={scrollViewInstance}>{renderSlot(slots, 'default')}</div>
+    return {
+      scrollViewInstance,
+      scrollTo,
+      scrollToElement,
+      onRefresh
     }
+  },
+  render() {
+    return <div ref="scrollViewInstance">{renderSlot(this.$slots, 'default')}</div>
   }
 })
