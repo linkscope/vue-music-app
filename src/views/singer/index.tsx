@@ -30,12 +30,15 @@ export default defineComponent({
     const classesRef = useStyle()
     const singerListRef = ref<SingerType[]>([])
     const shortcutListRef = ref<string[]>([])
-    const scrollYRef = ref(-1)
-    const currentIndexRef = ref(0)
+    const scrollYRef = ref(-1) // 列表滚动纵轴高度
+    const currentIndexRef = ref(0) // 当前滚动到的分类索引
+    const scrollNextDistance = ref(-1) // 滚动高度与下一个分类索引的距离差值
     const scrollInstance = ref()
     const singerListInstance = ref()
+    const fixTitleInstance = ref<HTMLDivElement | null>(null)
 
     const onTouchMoveElement = (index: number) => {
+      if (index < 0 || index >= heightList.length - 1) return
       if (scrollInstance.value && singerListInstance.value.children.length !== 0) {
         scrollYRef.value = -heightList[index]
         scrollInstance.value.scrollToElement(singerListInstance.value.children[index], 0)
@@ -116,10 +119,17 @@ export default defineComponent({
         const height2 = heightList[i + 1]
         if (!height2 || (-value >= height1 && -value < height2)) {
           currentIndexRef.value = i
+          scrollNextDistance.value = height2 + value
           return
         }
       }
       currentIndexRef.value = 0
+    })
+
+    watch(scrollNextDistance, (value) => {
+      const diff = value > 0 && value < 30 ? value - 30 : 0
+      console.log(diff)
+      fixTitleInstance.value!.style.transform = `translate3d(0, ${diff}px, 0)`
     })
 
     return () => {
@@ -148,6 +158,13 @@ export default defineComponent({
               activeIndex={currentIndexRef.value}
             />
           </div>
+          {scrollYRef.value > 0 ? (
+            ''
+          ) : (
+            <div ref={fixTitleInstance} class={classes.titleFixedWrapper}>
+              <h1 class={classes.titleFixed}>{singerList[currentIndexRef.value]?.title || ''}</h1>
+            </div>
+          )}
         </div>
       )
     }

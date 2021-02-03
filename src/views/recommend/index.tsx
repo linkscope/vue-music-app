@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:31
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-02 15:15:49
+ * @LastEditTime: 2021-02-03 09:29:48
  */
 import { defineComponent, onMounted, ref } from 'vue'
 
@@ -28,13 +28,9 @@ export default defineComponent({
     const scrollViewInstance = ref()
 
     onMounted(async () => {
-      setTimeout(async () => {
-        const bannerResult = await getBannerList(2)
-        bannerListRef.value = bannerResult.banners
-      }, 2000)
-
+      const bannerResult = await getBannerList(2)
       const recommendListResult = await getRecommendList()
-
+      bannerListRef.value = bannerResult.banners
       recommendListRef.value = recommendListResult.result
     })
 
