@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:31
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 09:29:48
+ * @LastEditTime: 2021-02-03 20:52:11
  */
 import { defineComponent, onMounted, ref } from 'vue'
 
@@ -28,18 +28,20 @@ export default defineComponent({
     const scrollViewInstance = ref()
 
     onMounted(async () => {
-      const bannerResult = await getBannerList(2)
       const recommendListResult = await getRecommendList()
+      const bannerResult = await getBannerList(2)
       bannerListRef.value = bannerResult.banners
       recommendListRef.value = recommendListResult.result
     })
 
     // 监听轮播图图片加载，确保可以重新计算scroll高度问题
     const onBannerImgLoad = () => {
-      if (!checkLoaded) {
-        scrollViewInstance.value.onRefresh()
-        checkLoaded = true
-      }
+      setTimeout(() => {
+        if (!checkLoaded) {
+          scrollViewInstance.value.onRefresh()
+          checkLoaded = true
+        }
+      }, 500)
     }
 
     return () => {

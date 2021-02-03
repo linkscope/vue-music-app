@@ -1,6 +1,7 @@
 import { defineComponent, ref, renderSlot, PropType, onMounted, watch } from 'vue'
 import BScroll from '@better-scroll/core'
 import BScrollBar from '@better-scroll/scroll-bar'
+import BPullUp from '@better-scroll/pull-up'
 import { EaseItem } from '@better-scroll/shared-utils'
 
 /*
@@ -8,10 +9,11 @@ import { EaseItem } from '@better-scroll/shared-utils'
  * @Author: linkscope
  * @Date: 2021-01-29 14:15:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-02 16:17:14
+ * @LastEditTime: 2021-02-03 20:49:34
  */
 
 BScroll.use(BScrollBar)
+BScroll.use(BPullUp as any)
 
 export default defineComponent({
   name: 'ScrollView',
@@ -35,6 +37,10 @@ export default defineComponent({
     onScroll: {
       type: Function as PropType<(x: number, y: number) => void>,
       default: () => ''
+    },
+    onPullUp: {
+      type: Function as PropType<() => void>,
+      default: () => ''
     }
   },
   setup(props) {
@@ -45,6 +51,7 @@ export default defineComponent({
       if (!scrollViewInstance.value) return
 
       scrollInstance.value = new BScroll(scrollViewInstance.value, {
+        pullUpLoad: true,
         probeType: props.probeType,
         click: props.click,
         scrollY: true,
@@ -55,6 +62,7 @@ export default defineComponent({
         scrollInstance.value.on('scroll', (position: { x: number; y: number }) => {
           props.onScroll(position.x, position.y)
         })
+        scrollInstance.value.on('pullingUp', () => props.onPullUp())
       }
     }
 
@@ -105,7 +113,8 @@ export default defineComponent({
       () => {
         setTimeout(() => {
           onRefresh()
-        }, 2000)
+          scrollInstance.value?.finishPullUp()
+        }, 500)
       }
     )
 

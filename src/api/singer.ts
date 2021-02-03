@@ -3,11 +3,11 @@
  * @Author: linkscope
  * @Date: 2021-01-29 17:40:52
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 17:52:45
+ * @LastEditTime: 2021-02-03 20:18:36
  */
 import request from './request'
 import Api from './api'
-import { ISinger } from '@/types'
+import { ISinger, ISong } from '@/types'
 
 export function getSingerList(
   limit: number
@@ -19,6 +19,25 @@ export function getSingerList(
     method: 'get',
     params: {
       limit
+    }
+  })
+}
+
+export function getSongList(
+  id: number,
+  offset?: number,
+  order = 'hot'
+): Promise<{
+  songs: ISong[]
+  total: number
+}> {
+  return request({
+    url: Api.getSongList,
+    method: 'get',
+    params: {
+      id,
+      offset,
+      order
     }
   })
 }

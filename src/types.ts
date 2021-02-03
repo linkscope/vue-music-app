@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 18:26:10
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 18:31:42
+ * @LastEditTime: 2021-02-03 15:39:59
  */
 import { RouteLocation, NavigationFailure } from 'vue-router'
 
@@ -20,6 +20,14 @@ export interface IRouterLinkSlot {
   navigate: (e?: MouseEvent) => Promise<void | NavigationFailure>
 }
 
+export interface IStore {
+  singerInfo: {
+    id: number
+    title: string
+    avatar: string
+  } | null
+}
+
 export interface IBanner {
   bannerId: string
   pic: string
@@ -34,7 +42,20 @@ export interface IRecommend {
 }
 
 export interface ISinger {
-  accountId: number
+  id: number
   name: string
   img1v1Url: string
+}
+
+export interface ISong {
+  id: number
+  name: string
+  ar: {
+    id: number
+    name: string
+  }[]
+  al: {
+    id: number
+    name: string
+  }
 }

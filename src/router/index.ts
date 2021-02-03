@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 17:35:38
+ * @LastEditTime: 2021-02-03 10:21:30
  */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
@@ -24,6 +24,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/singer',
     name: 'Singer',
     component: () => import('@/views/singer'),
+    children: [
+      {
+        path: 'detail/:id',
+        name: 'SingerDetail',
+        component: () => import('@/views/singer/detail'),
+        meta: {
+          title: '歌手详情'
+        }
+      }
+    ],
     meta: {
       title: '歌手'
     }

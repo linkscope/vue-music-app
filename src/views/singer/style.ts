@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-29 18:56:19
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 10:14:40
+ * @LastEditTime: 2021-02-03 10:50:39
  */
 import { createUseStyles } from 'vue-jss'
 import { Font } from '@/assets/variables'
@@ -44,4 +44,14 @@ const style = createUseStyles({
   }
 })
 
+const useDetailStyle = createUseStyles({
+  slideActive: {
+    transition: 'all 0.3s'
+  },
+  slideTo: {
+    transform: 'translate3d(100%, 0, 0)'
+  }
+})
+
+export { useDetailStyle }
 export default style

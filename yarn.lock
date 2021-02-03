@@ -853,6 +853,20 @@
   dependencies:
     "@better-scroll/shared-utils" "^2.1.4"
 
+"@better-scroll/core@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npm.taobao.org/@better-scroll/core/download/@better-scroll/core-2.2.0.tgz#4e1f76b560cdcbacc5d284ed137a268f96370fa2"
+  integrity sha1-Th92tWDNy6zF0oTtE3omj5Y3D6I=
+  dependencies:
+    "@better-scroll/shared-utils" "^2.2.0"
+
+"@better-scroll/pull-up@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npm.taobao.org/@better-scroll/pull-up/download/@better-scroll/pull-up-2.2.0.tgz#7cb38247d7750128560396e28671ad7bc35bc62f"
+  integrity sha1-fLOCR9d1AShWA5bihnGte8Nbxi8=
+  dependencies:
+    "@better-scroll/core" "^2.2.0"
+
 "@better-scroll/scroll-bar@^2.1.4":
   version "2.1.4"
   resolved "https://registry.npm.taobao.org/@better-scroll/scroll-bar/download/@better-scroll/scroll-bar-2.1.4.tgz#ae3b2933d8cfb00016c4df78de902dd9633ac344"
@@ -864,6 +878,11 @@
   version "2.1.4"
   resolved "https://registry.npm.taobao.org/@better-scroll/shared-utils/download/@better-scroll/shared-utils-2.1.4.tgz#2353dab63e433aaf452cb4228d38d76c2174ed06"
   integrity sha1-I1Patj5DOq9FLLQijTjXbCF07QY=
+
+"@better-scroll/shared-utils@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.npm.taobao.org/@better-scroll/shared-utils/download/@better-scroll/shared-utils-2.2.0.tgz#7795c762dda99cad4e5b6ef2823ffe89b608e9d2"
+  integrity sha1-d5XHYt2pnK1OW27ygj/+ibYI6dI=
 
 "@better-scroll/slide@^2.1.4":
   version "2.1.4"

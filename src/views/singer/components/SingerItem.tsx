@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-29 18:49:45
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 19:33:07
+ * @LastEditTime: 2021-02-03 15:21:22
  */
 import { defineComponent, PropType } from 'vue'
 import { createUseStyles } from 'vue-jss'
@@ -51,6 +51,10 @@ export default defineComponent({
     singer: {
       type: Object as PropType<SingerType>,
       required: true
+    },
+    onClick: {
+      type: Function as PropType<(singer: { id: number; title: string; avatar: string }) => void>,
+      default: () => ''
     }
   },
   setup(props) {
@@ -63,7 +67,17 @@ export default defineComponent({
           <h2 class={classes.title}>{title}</h2>
           <ul>
             {item.map((singer) => (
-              <li class={classes.item}>
+              <li
+                class={classes.item}
+                key={singer.id}
+                onClick={() =>
+                  props.onClick({
+                    id: singer.id,
+                    title: singer.name,
+                    avatar: singer.img1v1Url
+                  })
+                }
+              >
                 <img class={classes.avatar} v-lazy={singer.img1v1Url} alt="" />
                 <span class={classes.name}>{singer.name}</span>
               </li>

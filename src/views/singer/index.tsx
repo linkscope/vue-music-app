@@ -1,8 +1,10 @@
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { defineComponent, Fragment, onMounted, ref, watch } from 'vue'
+import { RouterView, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import cnchar from 'cnchar'
 
 import { getSingerList } from '@/api/singer'
-import { ISinger } from '@/types'
+import { ISinger, IStore } from '@/types'
 import useStyle from './style'
 
 import ScrollView from '@/components/ScrollView'
@@ -28,6 +30,8 @@ export default defineComponent({
   name: 'Singer',
   setup() {
     const classesRef = useStyle()
+    const router = useRouter()
+    const store = useStore<IStore>()
     const singerListRef = ref<SingerType[]>([])
     const shortcutListRef = ref<string[]>([])
     const scrollYRef = ref(-1) // 列表滚动纵轴高度
@@ -64,7 +68,7 @@ export default defineComponent({
       // 将歌手按照首字母分类
       singerList.forEach((item, index) => {
         const temp = {
-          accountId: item.accountId,
+          id: item.id,
           img1v1Url: item.img1v1Url,
           name: item.name
         }
@@ -101,6 +105,11 @@ export default defineComponent({
       return hot.concat(ret)
     }
 
+    const goDetail = (singer: { id: number; title: string; avatar: string }) => {
+      router.push(`/singer/detail/${singer.id}`)
+      store.commit('SET_SINGER_INFO', singer)
+    }
+
     onMounted(async () => {
       const result = await getSingerList(100)
       singerListRef.value = normalizeSingerList(result.artists)
@@ -127,9 +136,9 @@ export default defineComponent({
     })
 
     watch(scrollNextDistance, (value) => {
+      if (!fixTitleInstance.value) return
       const diff = value > 0 && value < 30 ? value - 30 : 0
-      console.log(diff)
-      fixTitleInstance.value!.style.transform = `translate3d(0, ${diff}px, 0)`
+      fixTitleInstance.value.style.transform = `translate3d(0, ${diff}px, 0)`
     })
 
     return () => {
@@ -137,35 +146,38 @@ export default defineComponent({
       const singerList = singerListRef.value
       const shortcutList = shortcutListRef.value
       return (
-        <div class={classes.container}>
-          <ScrollView
-            ref={scrollInstance}
-            listenScroll
-            class={classes.scrollView}
-            data={singerList}
-            onScroll={onScroll}
-          >
-            <ul ref={singerListInstance}>
-              {singerList.map((item) => (
-                <SingerItem singer={item} />
-              ))}
-            </ul>
-          </ScrollView>
-          <div class={classes.shortcutWrapper}>
-            <Shortcut
-              shortcutList={shortcutList}
-              onTouchMoveElement={onTouchMoveElement}
-              activeIndex={currentIndexRef.value}
-            />
-          </div>
-          {scrollYRef.value > 0 ? (
-            ''
-          ) : (
-            <div ref={fixTitleInstance} class={classes.titleFixedWrapper}>
-              <h1 class={classes.titleFixed}>{singerList[currentIndexRef.value]?.title || ''}</h1>
+        <Fragment>
+          <div class={classes.container}>
+            <ScrollView
+              ref={scrollInstance}
+              listenScroll
+              class={classes.scrollView}
+              data={singerList}
+              onScroll={onScroll}
+            >
+              <ul ref={singerListInstance}>
+                {singerList.map((item) => (
+                  <SingerItem singer={item} onClick={(singer) => goDetail(singer)} />
+                ))}
+              </ul>
+            </ScrollView>
+            <div class={classes.shortcutWrapper}>
+              <Shortcut
+                shortcutList={shortcutList}
+                onTouchMoveElement={onTouchMoveElement}
+                activeIndex={currentIndexRef.value}
+              />
             </div>
-          )}
-        </div>
+            {scrollYRef.value > 0 ? (
+              ''
+            ) : (
+              <div ref={fixTitleInstance} class={classes.titleFixedWrapper}>
+                <h1 class={classes.titleFixed}>{singerList[currentIndexRef.value]?.title || ''}</h1>
+              </div>
+            )}
+          </div>
+          <RouterView />
+        </Fragment>
       )
     }
   }
