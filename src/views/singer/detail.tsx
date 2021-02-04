@@ -12,7 +12,7 @@ import SongList from '@/components/SongList'
  * @Author: linkscope
  * @Date: 2021-02-03 10:20:12
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 20:48:18
+ * @LastEditTime: 2021-02-04 10:47:08
  */
 export default defineComponent({
   name: 'SingerDetail',

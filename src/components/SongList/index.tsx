@@ -3,123 +3,22 @@
  * @Author: linkscope
  * @Date: 2021-02-03 11:20:50
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 21:02:26
+ * @LastEditTime: 2021-02-04 11:16:59
  */
 import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { createUseStyles } from 'vue-jss'
 
 import { ISong } from '@/types'
-import { Font, Color } from '@/assets/variables'
-import { noWrap } from '@/assets/mixin'
+import { transformStyle } from '@/utils'
+import useStyle from './style'
+
 import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
 import Loading from '@/components/Loading'
 
-const useStyle = createUseStyles({
-  container: {
-    position: 'fixed',
-    zIndex: 100,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: '#fff'
-  },
-  iconWrapper: {
-    position: 'absolute',
-    top: 0,
-    left: 6,
-    zIndex: 102
-  },
-  icon: {
-    padding: 10,
-    height: Font['$font-size-big'],
-    width: Font['$font-size-biggest'],
-    color: Color['$color-theme']
-  },
-  title: {
-    ...(noWrap as any),
-    zIndex: 102,
-    position: 'absolute',
-    top: 0,
-    left: '10%',
-    width: '80%',
-    textAlign: 'center',
-    lineHeight: '40px',
-    fontSize: Font['$font-size-medium'],
-    color: '#fff'
-  },
-  backgroundImgWrapper: {
-    position: 'relative',
-    width: '100%',
-    height: 0,
-    paddingTop: '70%',
-    transformOrigin: 'top',
-    backgroundSize: 'cover'
-  },
-  backgroundFilter: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(7, 17, 27, 0.4)'
-  },
-  contentWrapper: {
-    position: 'relative',
-    height: '100%'
-  },
-  songListContainer: {
-    position: 'fixed',
-    top: 0,
-    bottom: 0,
-    width: '100%'
-  },
-  songItem: {
-    display: 'flex',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-    height: 64
-  },
-  songContent: {
-    flex: 1,
-    lineHeight: '20px',
-    overflow: 'hidden'
-  },
-  songItemName: {
-    ...(noWrap as any),
-    color: Color['$color-text'],
-    fontSize: Font['$font-size-small']
-  },
-  songItemDesc: {
-    ...(noWrap as any),
-    marginTop: 4,
-    color: Color['$color-text-dark'],
-    fontSize: Font['$font-size-smaller']
-  },
-  loadingContainer: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    zIndex: 120,
-    backgroundColor: Color['$color-background-dark']
-  }
-})
-
 // scroll滚动可以覆盖掉背景图的距离
 let scrollDiff = -1
-/*
- * @Description:
- * @Author: linkscope
- * @Date: 2021-02-03 11:20:50
- * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 16:05:13
- */
+
 export default defineComponent({
   name: 'SongList',
   props: {
@@ -150,6 +49,7 @@ export default defineComponent({
     const scrollYRef = ref(0)
     const scrollViewInstance = ref()
     const backgroundImgInstance = ref<HTMLDivElement | null>()
+    const playBtnInstance = ref<HTMLDivElement | null>()
 
     const getSongDesc = (song: ISong) => {
       const artists: string[] = []
@@ -175,17 +75,19 @@ export default defineComponent({
       const backgroundImgStyle = backgroundImgInstance.value.style
       // 当上拉时，有一个背景图片放大的动画效果
       if (value > 0) {
-        backgroundImgStyle.transform = `scale(${1 +
+        backgroundImgStyle[transformStyle('transform') as any] = `scale(${1 +
           value / backgroundImgInstance.value.clientHeight})`
       }
       if (-value > scrollDiff) {
         backgroundImgStyle.paddingTop = '0'
         backgroundImgStyle.height = '40px'
         backgroundImgStyle.zIndex = '10'
+        playBtnInstance.value!.style.display = 'none'
       } else {
         backgroundImgStyle.paddingTop = '70%'
         backgroundImgStyle.height = '0'
         backgroundImgStyle.zIndex = '0'
+        playBtnInstance.value!.style.display = ''
       }
     })
 
@@ -203,6 +105,10 @@ export default defineComponent({
             class={classes.backgroundImgWrapper}
             style={`background-image: url(${bgImg})`}
           >
+            <div v-show={songList.length > 0} ref={playBtnInstance} class={classes.playContainer}>
+              <Icon class={classes.playIcon} icon="bofang" />
+              <span class={classes.playText}>随机播放全部</span>
+            </div>
             <div class={classes.backgroundFilter}></div>
           </div>
           <div class={classes.contentWrapper}>
