@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 18:26:10
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 15:39:59
+ * @LastEditTime: 2021-02-19 10:40:39
  */
 import { RouteLocation, NavigationFailure } from 'vue-router'
 
@@ -26,6 +26,12 @@ export interface IStore {
     title: string
     avatar: string
   } | null
+  isPlaying: boolean
+  isFullScreen: boolean
+  playList: ISong[]
+  sequenceList: ISong[]
+  playMode: 'sequence' | 'loop' | 'random'
+  playingIndex: number
 }
 
 export interface IBanner {
@@ -57,5 +63,6 @@ export interface ISong {
   al: {
     id: number
     name: string
+    picUrl?: string
   }
 }

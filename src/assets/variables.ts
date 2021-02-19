@@ -15,7 +15,8 @@ export enum Color {
   '$color-text' = '#000',
   '$color-text-dark' = 'rgba(0, 0, 0, .3)',
   '$color-text-light' = 'rgba(255, 255, 255, 0.5)',
-  '$color-text-lighter' = 'rgba(255, 255, 255, 0.8)'
+  '$color-text-lighter' = 'rgba(255, 255, 255, 0.8)',
+  '$white' = '#fff'
 }
 
 export enum Font {

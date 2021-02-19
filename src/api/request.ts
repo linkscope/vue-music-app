@@ -18,11 +18,7 @@ request.interceptors.request.use((request) => {
 
 request.interceptors.response.use((response) => {
   const data = response.data
-  if (data.code === 200) {
-    return data
-  } else {
-    return Promise.reject(data)
-  }
+  return data
 })
 
 export default request

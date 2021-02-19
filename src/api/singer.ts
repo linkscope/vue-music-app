@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-29 17:40:52
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 20:18:36
+ * @LastEditTime: 2021-02-19 10:41:17
  */
 import request from './request'
 import Api from './api'
@@ -38,6 +38,44 @@ export function getSongList(
       id,
       offset,
       order
+    }
+  })
+}
+
+export function checkSong(
+  id: number
+): Promise<{
+  success: boolean
+}> {
+  return request({
+    url: Api.checkSong,
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}
+
+export function getSongUrl(id: number) {
+  return request({
+    url: Api.getSongUrl,
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}
+
+export function getSongDetail(
+  ids: string
+): Promise<{
+  songs: ISong[]
+}> {
+  return request({
+    url: Api.getSongDetail,
+    method: 'get',
+    params: {
+      ids
     }
   })
 }

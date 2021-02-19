@@ -28,8 +28,7 @@ const useStyle = createUseStyles({
   icon: {
     padding: 10,
     height: 18,
-    width: 18,
-    color: Color['$color-theme']
+    width: 18
   },
   title: {
     ...(noWrap as any),

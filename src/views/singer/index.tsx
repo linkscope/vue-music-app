@@ -1,5 +1,5 @@
 import { defineComponent, Fragment, onMounted, ref, watch } from 'vue'
-import { RouterView, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import cnchar from 'cnchar'
 
@@ -176,7 +176,6 @@ export default defineComponent({
               </div>
             )}
           </div>
-          <RouterView />
         </Fragment>
       )
     }

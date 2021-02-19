@@ -9,7 +9,7 @@ import { EaseItem } from '@better-scroll/shared-utils'
  * @Author: linkscope
  * @Date: 2021-01-29 14:15:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 20:49:34
+ * @LastEditTime: 2021-02-04 11:45:25
  */
 
 BScroll.use(BScrollBar)
@@ -35,12 +35,10 @@ export default defineComponent({
       default: false
     },
     onScroll: {
-      type: Function as PropType<(x: number, y: number) => void>,
-      default: () => ''
+      type: Function as PropType<(x: number, y: number) => void>
     },
     onPullUp: {
-      type: Function as PropType<() => void>,
-      default: () => ''
+      type: Function as PropType<() => void>
     }
   },
   setup(props) {
@@ -60,9 +58,9 @@ export default defineComponent({
 
       if (props.listenScroll) {
         scrollInstance.value.on('scroll', (position: { x: number; y: number }) => {
-          props.onScroll(position.x, position.y)
+          props.onScroll && props.onScroll(position.x, position.y)
         })
-        scrollInstance.value.on('pullingUp', () => props.onPullUp())
+        scrollInstance.value.on('pullingUp', () => props.onPullUp && props.onPullUp())
       }
     }
 

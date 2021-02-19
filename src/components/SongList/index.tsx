@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-03 11:20:50
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-04 11:16:59
+ * @LastEditTime: 2021-02-19 10:09:12
  */
 import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -15,6 +15,7 @@ import useStyle from './style'
 import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
 import Loading from '@/components/Loading'
+import store from '@/store'
 
 // scroll滚动可以覆盖掉背景图的距离
 let scrollDiff = -1
@@ -59,6 +60,13 @@ export default defineComponent({
 
     const onScroll = (x: number, y: number) => {
       scrollYRef.value = y
+    }
+
+    const selectSong = (index: number) => {
+      store.dispatch('dispatchSelectSong', {
+        songList: props.songList,
+        index
+      })
     }
 
     onMounted(() => {
@@ -121,8 +129,8 @@ export default defineComponent({
               onPullUp={onPullUp}
             >
               <ul style="padding: 20px 30px; background-color: #fff">
-                {songList.map((song) => (
-                  <li key={song.id} class={classes.songItem}>
+                {songList.map((song, index) => (
+                  <li key={song.id} class={classes.songItem} onClick={() => selectSong(index)}>
                     <div class={classes.songContent}>
                       <h2 class={classes.songItemName}>{song.name}</h2>
                       <p class={classes.songItemDesc}>{getSongDesc(song)}</p>
