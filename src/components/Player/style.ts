@@ -131,6 +131,24 @@ const useStyle = createUseStyles({
       fontSize: Font['$font-size-smaller'],
       color: Color['$color-text-dark']
     }
+  },
+  normalEnterActive: {
+    transition: 'all 0.4s',
+    '& .header': {
+      transition: 'all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32)'
+    }
+  },
+  normalEnter: {
+    opacity: 0,
+    '& .header': {
+      transform: 'translate3d(0, -100px, 0)'
+    }
+  },
+  miniEnterActive: {
+    transition: 'all 0.4s'
+  },
+  miniEnter: {
+    opacity: 0
   }
 })
 

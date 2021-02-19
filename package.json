@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "cnchar": "^3.0.1",
     "core-js": "^3.6.5",
+    "create-keyframe-animation": "^0.1.0",
     "fastclick": "^1.0.6",
     "jss": "^10.5.1",
     "jss-preset-default": "^10.5.1",
