@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-29 17:40:52
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-19 10:41:17
+ * @LastEditTime: 2021-02-19 16:53:17
  */
 import request from './request'
 import Api from './api'
@@ -56,7 +56,13 @@ export function checkSong(
   })
 }
 
-export function getSongUrl(id: number) {
+export function getSongUrl(
+  id: number
+): Promise<{
+  data: {
+    url: string
+  }[]
+}> {
   return request({
     url: Api.getSongUrl,
     method: 'get',

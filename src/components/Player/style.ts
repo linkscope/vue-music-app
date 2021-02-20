@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-19 09:44:36
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-19 15:23:20
+ * @LastEditTime: 2021-02-20 10:51:40
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -85,16 +85,36 @@ const useStyle = createUseStyles({
     width: '100%',
     height: '100%',
     boxSizing: 'border-box',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    border: '10px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '50%'
   },
   albumImg: {
     position: 'absolute',
-    left: 0,
-    top: 0,
-    width: '100%',
-    height: '100%',
+    left: 10,
+    top: 10,
+    width: 'calc(100% - 20px)',
+    height: 'calc(100% - 20px)',
     borderRadius: '50%'
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 50,
+    width: '100%'
+  },
+  footerOperators: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 20px',
+    boxSizing: 'border-box',
+    '& .icon': {
+      height: 50,
+      width: 50
+    },
+    '& .center': {
+      width: 100,
+      height: 100
+    }
   },
   miniContainer: {
     display: 'flex',
@@ -132,16 +152,27 @@ const useStyle = createUseStyles({
       color: Color['$color-text-dark']
     }
   },
+  miniOperators: {
+    flex: '0 0 30px',
+    padding: '0 20px',
+    '& .center': {
+      width: 30,
+      height: 30
+    }
+  },
   normalEnterActive: {
     transition: 'all 0.4s',
-    '& .header': {
+    '& .header-0-1-7, & .footer-0-1-16': {
       transition: 'all 0.4s cubic-bezier(0.86, 0.18, 0.82, 1.32)'
     }
   },
   normalEnter: {
     opacity: 0,
-    '& .header': {
+    '& .header-0-1-7': {
       transform: 'translate3d(0, -100px, 0)'
+    },
+    '& .footer-0-1-16': {
+      transform: 'translate3d(0, 100px, 0)'
     }
   },
   miniEnterActive: {

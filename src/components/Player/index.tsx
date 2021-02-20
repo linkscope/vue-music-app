@@ -1,4 +1,4 @@
-import { defineComponent, Fragment, watch, ref, Transition, computed } from 'vue'
+import { defineComponent, Fragment, watch, ref, Transition, computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import animations from 'create-keyframe-animation'
 
@@ -9,6 +9,10 @@ import { transformStyle } from '@/utils'
 
 import Icon from '@/components/Icon'
 
+// 默认播放顺序为下一首
+let isNext = true
+// 是否可以播放音乐
+let songReady = false
 /*
  * @Description:
  * @Author: linkscope
@@ -22,7 +26,11 @@ export default defineComponent({
     const store = useStore<IStore>()
     const classesRef = useStyle()
     const albumWrapperInstance = ref<HTMLDivElement | null>(null)
+    const audioInstance = ref<HTMLAudioElement | null>(null)
+    const albumInstance = ref<HTMLDivElement | null>(null)
+    const miniAlbumInstance = ref<HTMLDivElement | null>(null)
     const songRef = ref<ISong | null>(null)
+    const songUrlRef = ref('')
     const offsetPosition = computed(() => {
       const normalAlbumImgWidth = window.innerWidth * 0.8
       // 屏幕宽度的一半减去mini播放器的左边距20+圆半径15
@@ -39,14 +47,40 @@ export default defineComponent({
       return 35 / normalAlbumImgWidth
     })
 
+    const onNext = () => {
+      if (!songReady) return
+      let index = store.state.playingIndex + 1
+      if (index === store.state.playList.length) {
+        index = 0
+      }
+      isNext = true
+      store.commit('SET_PLAYING_INDEX', index)
+      store.commit('SET_IS_PLAYING', true)
+      songReady = true
+    }
+
+    const onPrevious = () => {
+      if (!songReady) return
+      let index = store.state.playingIndex - 1
+      if (!~index) {
+        index = store.state.playList.length - 1
+      }
+      isNext = false
+      store.commit('SET_PLAYING_INDEX', index)
+      store.commit('SET_IS_PLAYING', true)
+      songReady = true
+    }
+
     // 校验音乐是否可用；获取音乐专辑封面和url播放路径
-    const getSong = async (id: number) => {
-      const { success } = await checkSong(id)
-      if (success) {
-        const music = await getSongUrl(id)
+    const getSong = async (id: number, isNext = true) => {
+      try {
+        await checkSong(id)
+        const { data } = await getSongUrl(id)
         const { songs } = await getSongDetail(id.toString())
         songRef.value = songs[0]
-        console.log(music)
+        songUrlRef.value = data[0].url
+      } catch {
+        isNext ? onNext() : onPrevious()
       }
     }
 
@@ -106,15 +140,56 @@ export default defineComponent({
     watch(
       () => store.getters.playingSong,
       (value: ISong) => {
-        getSong(value.id)
+        getSong(value.id, isNext)
       }
     )
+
+    watch(
+      () => store.state.isPlaying,
+      async (value) => {
+        await nextTick()
+        if (value) {
+          const animation = {
+            0: {
+              transform: 'rotate(0)'
+            },
+            100: {
+              transform: 'rotate(360deg)'
+            }
+          }
+          animations.registerAnimation({
+            name: 'rotate',
+            animation,
+            presets: {
+              duration: 20000,
+              easing: 'linear',
+              iterations: 'infinite'
+            }
+          })
+          animations.runAnimation(albumInstance.value!, 'rotate')
+          animations.runAnimation(miniAlbumInstance.value!, 'rotate')
+          audioInstance.value?.play()
+        } else {
+          albumInstance.value!.style.animationPlayState = 'paused'
+          miniAlbumInstance.value!.style.animationPlayState = 'paused'
+          audioInstance.value?.pause()
+        }
+      }
+    )
+
+    watch(songUrlRef, async (value) => {
+      if (value) {
+        await nextTick()
+        audioInstance.value!.play()
+      }
+    })
 
     return () => {
       const classes = classesRef.value
       const playList = store.state.playList
       const isFullScreen = store.state.isFullScreen
       const song = songRef.value
+      const songUrl = songUrlRef.value
       return (
         <Fragment>
           <Transition
@@ -129,7 +204,7 @@ export default defineComponent({
           >
             <div v-show={playList.length && isFullScreen} class={classes.normalContainer}>
               <img class={classes.background} src={song?.al.picUrl} alt="" />
-              <div class="header">
+              <div class={classes.header}>
                 <div
                   class={classes.headerBack}
                   onClick={() => store.commit('SET_IS_FULL_SCREEN', false)}
@@ -143,9 +218,29 @@ export default defineComponent({
                 <div class={classes.contentLeft}>
                   <div ref={albumWrapperInstance} class={classes.contentAlbumWrapper}>
                     <div class={classes.contentAlbum}>
-                      <img class={classes.albumImg} src={song?.al.picUrl} alt="" />
+                      <img
+                        ref={albumInstance}
+                        class={classes.albumImg}
+                        src={song?.al.picUrl}
+                        alt=""
+                      />
                     </div>
                   </div>
+                </div>
+              </div>
+              <div class={classes.footer}>
+                <div class={classes.footerOperators}>
+                  <Icon icon="xunhuan" />
+                  <div onClick={onPrevious}>
+                    <Icon icon="shangyishou" />
+                  </div>
+                  <div onClick={() => store.commit('SET_IS_PLAYING', !store.state.isPlaying)}>
+                    <Icon class="center" icon={store.state.isPlaying ? 'tingzhi' : 'bofang'} />
+                  </div>
+                  <div onClick={onNext}>
+                    <Icon icon="xiayishou" />
+                  </div>
+                  <Icon icon="xihuan" />
                 </div>
               </div>
             </div>
@@ -158,6 +253,7 @@ export default defineComponent({
           >
             <div v-show={playList.length && !isFullScreen} class={classes.miniContainer}>
               <img
+                ref={miniAlbumInstance}
                 class={classes.miniAlbumImg}
                 src={song?.al.picUrl}
                 alt=""
@@ -167,8 +263,20 @@ export default defineComponent({
                 <h2>{song?.name}</h2>
                 <p>{song && getSongDesc(song)}</p>
               </div>
+              <div
+                class={classes.miniOperators}
+                onClick={() => store.commit('SET_IS_PLAYING', !store.state.isPlaying)}
+              >
+                <Icon class="center" icon={store.state.isPlaying ? 'tingzhi' : 'bofang'} />
+              </div>
             </div>
           </Transition>
+          <audio
+            ref={audioInstance}
+            src={songUrl}
+            onCanplay={() => (songReady = true)}
+            onError={() => (songReady = true)}
+          ></audio>
         </Fragment>
       )
     }
