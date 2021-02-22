@@ -8,6 +8,8 @@ import { checkSong, getSongUrl, getSongDetail } from '@/api/singer'
 import { transformStyle } from '@/utils'
 
 import Icon from '@/components/Icon'
+import ProgressBar from './ProgressBar'
+import ProgressCircle from './ProgressCircle'
 
 // 默认播放顺序为下一首
 let isNext = true
@@ -31,6 +33,9 @@ export default defineComponent({
     const miniAlbumInstance = ref<HTMLDivElement | null>(null)
     const songRef = ref<ISong | null>(null)
     const songUrlRef = ref('')
+    const currentTime = ref(0)
+    const durationTime = ref(0)
+    const percent = computed(() => currentTime.value / durationTime.value)
     const offsetPosition = computed(() => {
       const normalAlbumImgWidth = window.innerWidth * 0.8
       // 屏幕宽度的一半减去mini播放器的左边距20+圆半径15
@@ -91,6 +96,13 @@ export default defineComponent({
       return artists.join('/')
     }
 
+    const formatTime = (interval: number) => {
+      interval = interval | 0
+      const minute = (interval / 60) | 0
+      const second = interval % 60
+      return `${minute < 10 ? '0' + minute : minute}:${second < 10 ? '0' + second : second}`
+    }
+
     /**
      * 动画钩子组合
      */
@@ -122,6 +134,7 @@ export default defineComponent({
       // 回收动画
       animations.unregisterAnimation('move')
       albumWrapperInstance.value!.style.animation = ''
+      albumWrapperInstance.value!.style[transformStyle('transform') as any] = ''
     }
     const onLeave = (el: Element, done: () => void) => {
       const { x, y } = offsetPosition.value
@@ -229,6 +242,23 @@ export default defineComponent({
                 </div>
               </div>
               <div class={classes.footer}>
+                <div class={classes.footerProgress}>
+                  <span class={`${classes.footerProgressTime} left`}>
+                    {formatTime(currentTime.value)}
+                  </span>
+                  <div style="flex: 1">
+                    <ProgressBar
+                      percent={percent.value}
+                      onChange={(percent) => {
+                        audioInstance.value!.currentTime = durationTime.value * percent
+                        store.commit('SET_IS_PLAYING', true)
+                      }}
+                    />
+                  </div>
+                  <span class={`${classes.footerProgressTime} right`}>
+                    {formatTime(durationTime.value)}
+                  </span>
+                </div>
                 <div class={classes.footerOperators}>
                   <Icon icon="xunhuan" />
                   <div onClick={onPrevious}>
@@ -252,13 +282,15 @@ export default defineComponent({
             leaveToClass={classes.miniEnter}
           >
             <div v-show={playList.length && !isFullScreen} class={classes.miniContainer}>
-              <img
-                ref={miniAlbumInstance}
-                class={classes.miniAlbumImg}
-                src={song?.al.picUrl}
-                alt=""
-                onClick={() => store.commit('SET_IS_FULL_SCREEN', true)}
-              />
+              <ProgressCircle percent={percent.value}>
+                <img
+                  ref={miniAlbumInstance}
+                  class={classes.miniAlbumImg}
+                  src={song?.al.picUrl}
+                  alt=""
+                  onClick={() => store.commit('SET_IS_FULL_SCREEN', true)}
+                />
+              </ProgressCircle>
               <div class={classes.miniDesc}>
                 <h2>{song?.name}</h2>
                 <p>{song && getSongDesc(song)}</p>
@@ -274,8 +306,15 @@ export default defineComponent({
           <audio
             ref={audioInstance}
             src={songUrl}
-            onCanplay={() => (songReady = true)}
+            onCanplay={() => {
+              songReady = true
+              durationTime.value = audioInstance.value!.duration
+            }}
             onError={() => (songReady = true)}
+            onTimeupdate={(event) => {
+              //@ts-ignore
+              currentTime.value = event.target.currentTime
+            }}
           ></audio>
         </Fragment>
       )

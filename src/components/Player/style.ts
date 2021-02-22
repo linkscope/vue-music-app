@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-19 09:44:36
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-20 10:51:40
+ * @LastEditTime: 2021-02-22 15:12:48
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -17,7 +17,8 @@ const useStyle = createUseStyles({
     top: 0,
     bottom: 0,
     zIndex: 150,
-    backgroundColor: Color['$color-background']
+    backgroundColor: Color['$color-background'],
+    overflow: 'hidden'
   },
   background: {
     position: 'absolute',
@@ -101,6 +102,26 @@ const useStyle = createUseStyles({
     bottom: 50,
     width: '100%'
   },
+  footerProgress: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '80%',
+    margin: '0 auto',
+    padding: '10px 0'
+  },
+  footerProgressTime: {
+    color: Color.$white,
+    fontSize: Font['$font-size-smaller'],
+    flex: '0 0 40px',
+    lineHeight: '30px',
+    width: 40,
+    '&.left': {
+      textAlign: 'left'
+    },
+    '&.right': {
+      textAlign: 'right'
+    }
+  },
   footerOperators: {
     display: 'flex',
     alignItems: 'center',
@@ -128,9 +149,11 @@ const useStyle = createUseStyles({
     backgroundColor: Color.$white
   },
   miniAlbumImg: {
+    position: 'absolute',
+    top: 3,
+    left: 3,
     flex: '0 0 30px',
     width: 30,
-    margin: '0 10px 0 20px',
     borderRadius: '50%'
   },
   miniDesc: {
