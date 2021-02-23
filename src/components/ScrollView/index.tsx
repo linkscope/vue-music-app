@@ -9,7 +9,7 @@ import { EaseItem } from '@better-scroll/shared-utils'
  * @Author: linkscope
  * @Date: 2021-01-29 14:15:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-04 11:45:25
+ * @LastEditTime: 2021-02-23 11:33:40
  */
 
 BScroll.use(BScrollBar)

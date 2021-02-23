@@ -1,13 +1,15 @@
 import { defineComponent, Fragment, watch, ref, Transition, computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import animations from 'create-keyframe-animation'
+import lyricParser from 'lyric-parser'
 
 import { IStore, ISong } from '@/types'
 import useStyle from './style'
-import { checkSong, getSongUrl, getSongDetail } from '@/api/singer'
+import { checkSong, getSongUrl, getSongDetail, getLyric } from '@/api/singer'
 import { transformStyle } from '@/utils'
 
 import Icon from '@/components/Icon'
+import ScrollView from '@/components/ScrollView'
 import ProgressBar from './ProgressBar'
 import ProgressCircle from './ProgressCircle'
 
@@ -15,6 +17,13 @@ import ProgressCircle from './ProgressCircle'
 let isNext = true
 // 是否可以播放音乐
 let songReady = false
+// 滑动的信息
+const touchInfo = {
+  initiated: false,
+  startX: 0,
+  startY: 0,
+  percent: 0
+}
 /*
  * @Description:
  * @Author: linkscope
@@ -27,14 +36,20 @@ export default defineComponent({
   setup() {
     const store = useStore<IStore>()
     const classesRef = useStyle()
+    const albumContainerInstance = ref<HTMLDivElement | null>(null)
     const albumWrapperInstance = ref<HTMLDivElement | null>(null)
     const audioInstance = ref<HTMLAudioElement | null>(null)
     const albumInstance = ref<HTMLDivElement | null>(null)
     const miniAlbumInstance = ref<HTMLDivElement | null>(null)
+    const lyricContainerInstance = ref()
+    const lyricLineInstance = ref<HTMLDivElement | null>(null)
     const songRef = ref<ISong | null>(null)
     const songUrlRef = ref('')
     const currentTime = ref(0)
     const durationTime = ref(0)
+    const lyricRef = ref<lyricParser | null>(null)
+    const currentLineLyric = ref(0)
+    const currentPage = ref('cd')
     const percent = computed(() => currentTime.value / durationTime.value)
     const offsetPosition = computed(() => {
       const normalAlbumImgWidth = window.innerWidth * 0.8
@@ -80,6 +95,9 @@ export default defineComponent({
       if (store.state.playMode === 'loop') {
         audioInstance.value!.currentTime = 0
         audioInstance.value!.play()
+        if (lyricRef.value) {
+          lyricRef.value.seek(0)
+        }
       } else {
         onNext()
       }
@@ -91,6 +109,22 @@ export default defineComponent({
         await checkSong(id)
         const { data } = await getSongUrl(id)
         const { songs } = await getSongDetail(id.toString())
+        const { lrc } = await getLyric(id)
+        if (lyricRef.value) {
+          lyricRef.value.stop()
+        }
+        lyricRef.value = new lyricParser(lrc.lyric, ({ lineNum }) => {
+          currentLineLyric.value = lineNum
+          if (lineNum > 5) {
+            const lineInstance = lyricLineInstance.value!.children[lineNum - 5]
+            lyricContainerInstance.value!.scrollToElement(lineInstance, 1000)
+          } else {
+            lyricContainerInstance.value!.scrollTo(0, 0, 1000)
+          }
+        })
+        if (store.state.isPlaying) {
+          lyricRef.value.play()
+        }
         songRef.value = songs[0]
         songUrlRef.value = data[0].url
       } catch {
@@ -159,6 +193,57 @@ export default defineComponent({
       albumWrapperInstance.value!.style[transformStyle('transform') as any] = ''
     }
 
+    const onTouchStart = (event: TouchEvent) => {
+      touchInfo.initiated = true
+      const touch = event.touches[0]
+      touchInfo.startX = touch.pageX
+      touchInfo.startY = touch.pageY
+    }
+    const onTouchMove = (event: TouchEvent) => {
+      if (!touchInfo.initiated) return
+      const touch = event.touches[0]
+      const deltaX = touch.pageX - touchInfo.startX
+      const deltaY = touch.pageY - touchInfo.startY
+      if (Math.abs(deltaY) <= Math.abs(deltaX)) {
+        const left = currentPage.value === 'cd' ? 0 : -window.innerWidth
+        const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + deltaX))
+        touchInfo.percent = Math.abs(offsetWidth / window.innerWidth)
+        lyricContainerInstance.value!.$el.style[
+          transformStyle('transform')
+        ] = `translate3d(${offsetWidth}px, 0, 0)`
+        lyricContainerInstance.value!.$el.style.transition = ''
+        albumContainerInstance.value!.style.opacity = String(1 - touchInfo.percent)
+        albumContainerInstance.value!.style.transition = ''
+      } else {
+        touchInfo.percent = 0
+      }
+    }
+    const onTouchEnd = (event: TouchEvent) => {
+      let offsetWidth = 0
+      let opacity = 0
+      if (currentPage.value === 'cd') {
+        if (touchInfo.percent > 0.1 && touchInfo.percent !== 0) {
+          offsetWidth = -window.innerWidth
+          currentPage.value = 'lyric'
+        } else {
+          opacity = 1
+        }
+      } else {
+        if (touchInfo.percent < 0.9 && touchInfo.percent !== 0) {
+          currentPage.value = 'cd'
+          opacity = 1
+        } else {
+          offsetWidth = -window.innerWidth
+        }
+      }
+      lyricContainerInstance.value!.$el.style[
+        transformStyle('transform')
+      ] = `translate3d(${offsetWidth}px, 0, 0)`
+      lyricContainerInstance.value!.$el.style.transition = 'all 0.3s'
+      albumContainerInstance.value!.style.opacity = String(opacity)
+      albumContainerInstance.value!.style.transition = 'all 0.3s'
+    }
+
     watch(
       () => store.getters.playingSong,
       (nextSong: ISong, prevSong: ISong) => {
@@ -193,10 +278,12 @@ export default defineComponent({
           animations.runAnimation(albumInstance.value!, 'rotate')
           animations.runAnimation(miniAlbumInstance.value!, 'rotate')
           audioInstance.value?.play()
+          lyricRef.value!.togglePlay()
         } else {
           albumInstance.value!.style.animationPlayState = 'paused'
           miniAlbumInstance.value!.style.animationPlayState = 'paused'
           audioInstance.value?.pause()
+          lyricRef.value!.stop()
         }
       }
     )
@@ -214,6 +301,7 @@ export default defineComponent({
       const isFullScreen = store.state.isFullScreen
       const song = songRef.value
       const songUrl = songUrlRef.value
+      const lyric = lyricRef.value
       return (
         <Fragment>
           <Transition
@@ -238,8 +326,13 @@ export default defineComponent({
                 <div class={classes.headerTitle}>{song?.name}</div>
                 <div class={classes.headerSubTitle}>{song && getSongDesc(song)}</div>
               </div>
-              <div class={classes.content}>
-                <div class={classes.contentLeft}>
+              <div
+                class={classes.content}
+                onTouchstart={onTouchStart}
+                onTouchmove={onTouchMove}
+                onTouchend={onTouchEnd}
+              >
+                <div ref={albumContainerInstance} class={classes.contentLeft}>
                   <div ref={albumWrapperInstance} class={classes.contentAlbumWrapper}>
                     <div class={classes.contentAlbum}>
                       <img
@@ -251,8 +344,35 @@ export default defineComponent({
                     </div>
                   </div>
                 </div>
+                <ScrollView
+                  ref={lyricContainerInstance}
+                  class={classes.contentRight}
+                  data={lyric?.lines}
+                >
+                  <div ref={lyricLineInstance} class={classes.contentLyric}>
+                    {lyric
+                      ? lyric.lines.map((item, index) => (
+                          <p
+                            class={`${classes.contentLyricText} ${
+                              currentLineLyric.value === index ? 'active' : ''
+                            }`}
+                          >
+                            {item.txt}
+                          </p>
+                        ))
+                      : ''}
+                  </div>
+                </ScrollView>
               </div>
               <div class={classes.footer}>
+                <div class={classes.footerDotContainer}>
+                  <div
+                    class={`${classes.footerDot} ${currentPage.value === 'cd' ? 'active' : ''}`}
+                  ></div>
+                  <div
+                    class={`${classes.footerDot} ${currentPage.value === 'lyric' ? 'active' : ''}`}
+                  ></div>
+                </div>
                 <div class={classes.footerProgress}>
                   <span class={`${classes.footerProgressTime} left`}>
                     {formatTime(currentTime.value)}
@@ -262,6 +382,7 @@ export default defineComponent({
                       percent={percent.value}
                       onChange={(percent) => {
                         audioInstance.value!.currentTime = durationTime.value * percent
+                        lyricRef.value?.seek(audioInstance.value!.currentTime * 1000)
                         store.commit('SET_IS_PLAYING', true)
                       }}
                     />

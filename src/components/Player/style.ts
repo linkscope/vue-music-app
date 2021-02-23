@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-19 09:44:36
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-22 16:07:46
+ * @LastEditTime: 2021-02-23 11:23:18
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -89,6 +89,27 @@ const useStyle = createUseStyles({
     border: '10px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '50%'
   },
+  contentRight: {
+    display: 'inline-block',
+    verticalAlign: 'top',
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden'
+  },
+  contentLyric: {
+    width: '80%',
+    margin: '0 auto',
+    overflow: 'hidden',
+    textAlign: 'center'
+  },
+  contentLyricText: {
+    lineHeight: '32px',
+    color: Color['$color-text-light'],
+    fontSize: Font['$font-size-small'],
+    '&.active': {
+      color: Color['$color-theme']
+    }
+  },
   albumImg: {
     position: 'absolute',
     left: 10,
@@ -101,6 +122,24 @@ const useStyle = createUseStyles({
     position: 'absolute',
     bottom: 50,
     width: '100%'
+  },
+  footerDotContainer: {
+    textAlign: 'center',
+    fontSize: 0
+  },
+  footerDot: {
+    display: 'inline-block',
+    verticalAlign: 'middle',
+    margin: '0 4px',
+    width: 8,
+    height: 8,
+    borderRadius: '50%',
+    backgroundColor: Color['$color-text-light'],
+    '&.active': {
+      width: 20,
+      borderRadius: 5,
+      backgroundColor: Color['$color-text-lighter']
+    }
   },
   footerProgress: {
     display: 'flex',
