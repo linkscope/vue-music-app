@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-19 09:44:36
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-22 15:12:48
+ * @LastEditTime: 2021-02-22 16:07:46
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -126,15 +126,15 @@ const useStyle = createUseStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0 20px',
-    boxSizing: 'border-box',
+    width: '80%',
+    margin: '0 auto',
     '& .icon': {
-      height: 50,
-      width: 50
+      height: 30,
+      width: 30
     },
     '& .center': {
-      width: 100,
-      height: 100
+      width: 40,
+      height: 40
     }
   },
   miniContainer: {

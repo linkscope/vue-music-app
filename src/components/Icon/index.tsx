@@ -5,7 +5,7 @@ import { defineComponent, PropType } from 'vue'
  * @Author: linkscope
  * @Date: 2021-01-28 13:46:18
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-28 13:51:06
+ * @LastEditTime: 2021-02-22 16:05:47
  */
 export default defineComponent({
   name: 'Icon',
@@ -17,14 +17,18 @@ export default defineComponent({
     prefix: {
       type: String as PropType<string>,
       default: 'icon'
+    },
+    color: {
+      type: String as PropType<string>,
+      default: '#fff'
     }
   },
   setup(props) {
     return () => {
-      const { icon, prefix } = props
+      const { icon, prefix, color } = props
       return (
         <svg class="icon" aria-hidden="true">
-          <use href={`#${prefix}${icon}`}></use>
+          <use href={`#${prefix}${icon}`} color={color}></use>
         </svg>
       )
     }

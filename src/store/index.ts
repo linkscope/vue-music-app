@@ -3,10 +3,11 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-19 10:10:26
+ * @LastEditTime: 2021-02-23 10:22:34
  */
 import { createStore, createLogger } from 'vuex'
 import { IStore, ISong } from '@/types'
+import { shuffleArray } from '@/utils'
 
 export default createStore<IStore>({
   state: {
@@ -43,6 +44,9 @@ export default createStore<IStore>({
     },
     SET_IS_PLAYING(state, isPlaying: boolean) {
       state.isPlaying = isPlaying
+    },
+    SET_PLAY_MODE(state, playMode: string) {
+      state.playMode = playMode as any
     }
   },
   actions: {
@@ -53,9 +57,32 @@ export default createStore<IStore>({
         index: number
       }
     ) {
+      commit('SET_PLAY_MODE', 'sequence')
       commit('SET_SEQUENCE_LIST', payload.songList)
       commit('SET_PLAY_LIST', payload.songList)
       commit('SET_PLAYING_INDEX', payload.index)
+      commit('SET_IS_FULL_SCREEN', true)
+      commit('SET_IS_PLAYING', true)
+    },
+    dispatchPlayMode({ commit, state, getters }) {
+      const playMode = ['sequence', 'loop', 'random']
+      const currentModeIndex = playMode.indexOf(state.playMode as any)
+      const nextMode = playMode[(currentModeIndex + 1) % 3]
+      const playingSongId = getters.playingSong.id
+      if (nextMode === 'random') {
+        commit('SET_PLAY_LIST', shuffleArray(state.sequenceList))
+      } else {
+        commit('SET_PLAY_LIST', state.sequenceList)
+      }
+      const currentIndex = state.playList.findIndex((item) => item.id === playingSongId)
+      commit('SET_PLAY_MODE', nextMode)
+      commit('SET_PLAYING_INDEX', currentIndex)
+    },
+    dispatchRandomPlay({ commit }, songList: ISong[]) {
+      commit('SET_PLAY_MODE', 'random')
+      commit('SET_SEQUENCE_LIST', songList)
+      commit('SET_PLAY_LIST', shuffleArray(songList))
+      commit('SET_PLAYING_INDEX', 0)
       commit('SET_IS_FULL_SCREEN', true)
       commit('SET_IS_PLAYING', true)
     }

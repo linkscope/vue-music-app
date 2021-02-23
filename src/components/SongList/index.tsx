@@ -3,10 +3,11 @@
  * @Author: linkscope
  * @Date: 2021-02-03 11:20:50
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-19 10:09:12
+ * @LastEditTime: 2021-02-23 10:18:17
  */
 import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 import { ISong } from '@/types'
 import { transformStyle } from '@/utils'
@@ -15,7 +16,6 @@ import useStyle from './style'
 import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
 import Loading from '@/components/Loading'
-import store from '@/store'
 
 // scroll滚动可以覆盖掉背景图的距离
 let scrollDiff = -1
@@ -46,6 +46,7 @@ export default defineComponent({
   },
   setup(props) {
     const router = useRouter()
+    const store = useStore()
     const classesRef = useStyle()
     const scrollYRef = ref(0)
     const scrollViewInstance = ref()
@@ -113,8 +114,13 @@ export default defineComponent({
             class={classes.backgroundImgWrapper}
             style={`background-image: url(${bgImg})`}
           >
-            <div v-show={songList.length > 0} ref={playBtnInstance} class={classes.playContainer}>
-              <Icon class={classes.playIcon} icon="bofang" />
+            <div
+              v-show={songList.length > 0}
+              ref={playBtnInstance}
+              class={classes.playContainer}
+              onClick={() => store.dispatch('dispatchRandomPlay', props.songList)}
+            >
+              <Icon class={classes.playIcon} icon="bofang" color="#3754fd" />
               <span class={classes.playText}>随机播放全部</span>
             </div>
             <div class={classes.backgroundFilter}></div>

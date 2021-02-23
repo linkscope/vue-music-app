@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-22 10:05:28
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-22 14:53:59
+ * @LastEditTime: 2021-02-23 10:06:39
  */
 import { defineComponent, PropType, watch, ref, withModifiers } from 'vue'
 import { createUseStyles } from 'vue-jss'
@@ -99,6 +99,15 @@ export default defineComponent({
       props.onChange(percent)
     }
 
+    const onClick = (event: MouseEvent) => {
+      const rect = progressContainerInstance.value!.getBoundingClientRect()
+      const barWidth = progressContainerInstance.value!.clientWidth - 12
+      // 用滑动后距离左部的距离减去容器左部的距离 这样哪怕点击按钮本身都可以获得正确的偏移量
+      const offsetWidth = event.pageX - rect.left
+      progressBtnOffset(offsetWidth)
+      props.onChange(offsetWidth / barWidth)
+    }
+
     watch(
       () => props.percent,
       (value) => {
@@ -113,15 +122,7 @@ export default defineComponent({
     return () => {
       const classes = classesRef.value
       return (
-        <div
-          ref={progressContainerInstance}
-          class={classes.container}
-          onClick={(event) => {
-            const barWidth = progressContainerInstance.value!.clientWidth - 12
-            progressBtnOffset(event.offsetX)
-            props.onChange(event.offsetX / barWidth)
-          }}
-        >
+        <div ref={progressContainerInstance} class={classes.container} onClick={onClick}>
           <div class={classes.wrapper}>
             <div ref={progressInstance} class={classes.progress}></div>
             <div

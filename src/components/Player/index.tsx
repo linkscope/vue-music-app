@@ -76,6 +76,15 @@ export default defineComponent({
       songReady = true
     }
 
+    const onEnded = () => {
+      if (store.state.playMode === 'loop') {
+        audioInstance.value!.currentTime = 0
+        audioInstance.value!.play()
+      } else {
+        onNext()
+      }
+    }
+
     // 校验音乐是否可用；获取音乐专辑封面和url播放路径
     const getSong = async (id: number, isNext = true) => {
       try {
@@ -152,8 +161,10 @@ export default defineComponent({
 
     watch(
       () => store.getters.playingSong,
-      (value: ISong) => {
-        getSong(value.id, isNext)
+      (nextSong: ISong, prevSong: ISong) => {
+        if (!prevSong || nextSong.id !== prevSong.id) {
+          getSong(nextSong.id, isNext)
+        }
       }
     )
 
@@ -260,12 +271,14 @@ export default defineComponent({
                   </span>
                 </div>
                 <div class={classes.footerOperators}>
-                  <Icon icon="xunhuan" />
+                  <div onClick={() => store.dispatch('dispatchPlayMode')}>
+                    <Icon icon={store.state.playMode} />
+                  </div>
                   <div onClick={onPrevious}>
                     <Icon icon="shangyishou" />
                   </div>
                   <div onClick={() => store.commit('SET_IS_PLAYING', !store.state.isPlaying)}>
-                    <Icon class="center" icon={store.state.isPlaying ? 'tingzhi' : 'bofang'} />
+                    <Icon class="center" icon={store.state.isPlaying ? 'zanting' : 'bofang'} />
                   </div>
                   <div onClick={onNext}>
                     <Icon icon="xiayishou" />
@@ -299,7 +312,11 @@ export default defineComponent({
                 class={classes.miniOperators}
                 onClick={() => store.commit('SET_IS_PLAYING', !store.state.isPlaying)}
               >
-                <Icon class="center" icon={store.state.isPlaying ? 'tingzhi' : 'bofang'} />
+                <Icon
+                  class="center"
+                  icon={store.state.isPlaying ? 'zanting' : 'bofang'}
+                  color="#d93f30"
+                />
               </div>
             </div>
           </Transition>
@@ -311,6 +328,7 @@ export default defineComponent({
               durationTime.value = audioInstance.value!.duration
             }}
             onError={() => (songReady = true)}
+            onEnded={onEnded}
             onTimeupdate={(event) => {
               //@ts-ignore
               currentTime.value = event.target.currentTime
