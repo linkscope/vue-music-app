@@ -39,4 +39,14 @@ const style = createUseStyles({
   }
 })
 
+const useDetailStyle = createUseStyles({
+  slideActive: {
+    transition: 'all 0.3s'
+  },
+  slideTo: {
+    transform: 'translate3d(100%, 0, 0)'
+  }
+})
+
+export { useDetailStyle }
 export default style

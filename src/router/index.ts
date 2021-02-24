@@ -21,6 +21,14 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/recommend/detail/:id',
+    name: 'RecommendDetail',
+    component: () => import('@/views/recommend/detail'),
+    meta: {
+      title: '歌单详情'
+    }
+  },
+  {
     path: '/singer',
     name: 'Singer',
     component: () => import('@/views/singer'),

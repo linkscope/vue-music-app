@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 21:45:00
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-24 11:34:29
+ * @LastEditTime: 2021-02-24 14:14:34
  */
 import request from './request'
 import Api from './api'
@@ -34,6 +34,28 @@ export function getRecommendList(
     method: 'get',
     params: {
       limit
+    }
+  })
+}
+
+export function getRecommendDetail(
+  id: number
+): Promise<{
+  playlist: {
+    coverImgUrl: string
+    id: number
+    description: string
+    name: string
+    trackIds: {
+      id: number
+    }[]
+  }
+}> {
+  return request({
+    url: Api.getReccomendDetail,
+    method: 'get',
+    params: {
+      id
     }
   })
 }

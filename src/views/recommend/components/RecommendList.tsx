@@ -52,6 +52,10 @@ export default defineComponent({
     recommendList: {
       type: Array as PropType<IRecommend[]>,
       required: true
+    },
+    onClick: {
+      type: Function as PropType<(recommend: IRecommend) => void>,
+      default: () => ''
     }
   },
   setup(props) {
@@ -62,7 +66,7 @@ export default defineComponent({
       return (
         <ul>
           {recommendList.map((item) => (
-            <li class={classes.item}>
+            <li class={classes.item} onClick={() => props.onClick(item)}>
               <div class={classes.pic}>
                 <img v-lazy={item.picUrl} alt="" width="60" />
               </div>

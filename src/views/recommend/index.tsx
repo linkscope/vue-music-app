@@ -6,6 +6,7 @@
  * @LastEditTime: 2021-02-24 11:32:40
  */
 import { defineComponent, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { IBanner, IRecommend } from '@/types'
 import { getBannerList, getRecommendList } from '@/api/recommend'
@@ -23,6 +24,7 @@ let checkLoaded = false
 export default defineComponent({
   name: 'Recommend',
   setup() {
+    const router = useRouter()
     const classesRef = useStyle()
     const bannerListRef = ref<IBanner[]>([])
     const recommendListRef = ref<IRecommend[]>([])
@@ -68,7 +70,14 @@ export default defineComponent({
                 <Banner bannerList={bannerList} onBannerImgLoad={onBannerImgLoad} />
               </div>
               <h1 class={classes.recommendTitle}>热门歌单推荐</h1>
-              <RecommendList recommendList={recommendList} />
+              <RecommendList
+                recommendList={recommendList}
+                onClick={(recommend) =>
+                  router.push({
+                    path: `/recommend/detail/${recommend.id}`
+                  })
+                }
+              />
             </div>
             <div class={classes.scrollViewWrapper} v-show={!recommendList.length}>
               <Loading />

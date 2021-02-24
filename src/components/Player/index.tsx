@@ -189,6 +189,7 @@ export default defineComponent({
       // 回收动画
       animations.unregisterAnimation('move')
       albumWrapperInstance.value!.style.animation = ''
+      albumWrapperInstance.value!.style.transition = ''
       albumWrapperInstance.value!.style[transformStyle('transform') as any] = ''
     }
     const onLeave = (el: Element, done: () => void) => {
@@ -198,11 +199,6 @@ export default defineComponent({
         transformStyle('transform') as any
       ] = `translate3d(${x}px, ${y}px, 0) scale(${offsetScale.value})`
       albumWrapperInstance.value!.addEventListener('transitionend', done)
-    }
-    const onAfterLeave = () => {
-      // 回收动画
-      albumWrapperInstance.value!.style.transition = ''
-      albumWrapperInstance.value!.style[transformStyle('transform') as any] = ''
     }
 
     const onTouchStart = (event: TouchEvent) => {
@@ -327,7 +323,6 @@ export default defineComponent({
             onEnter={onEnter}
             onAfterEnter={onAfterEnter}
             onLeave={onLeave}
-            onAfterLeave={onAfterLeave}
           >
             <div v-show={playList.length && isFullScreen} class={classes.normalContainer}>
               <img class={classes.background} src={song?.al.picUrl} alt="" />
