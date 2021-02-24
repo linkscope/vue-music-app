@@ -66,3 +66,10 @@ export interface ISong {
     picUrl?: string
   }
 }
+
+export interface IRank {
+  coverImgUrl: string
+  description: string
+  id: number
+  name: string
+}

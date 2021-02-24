@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-03 11:20:50
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-24 11:19:19
+ * @LastEditTime: 2021-02-24 16:40:04
  */
 import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -41,6 +41,10 @@ export default defineComponent({
       default: () => ''
     },
     loading: {
+      type: Boolean as PropType<boolean>,
+      default: false
+    },
+    isRank: {
       type: Boolean as PropType<boolean>,
       default: false
     }
@@ -109,7 +113,7 @@ export default defineComponent({
 
     return () => {
       const classes = classesRef.value
-      const { title, bgImg, songList, loading, onPullUp } = props
+      const { title, bgImg, songList, loading, onPullUp, isRank } = props
       return (
         <div class={classes.container}>
           <div class={classes.iconWrapper} onClick={() => router.back()}>
@@ -144,6 +148,13 @@ export default defineComponent({
               <ul style="padding: 20px 30px; background-color: #fff">
                 {songList.map((song, index) => (
                   <li key={song.id} class={classes.songItem} onClick={() => selectSong(index)}>
+                    {isRank ? (
+                      <div class={classes.songRank}>
+                        <span class={classes.songRankText}>{index + 1}</span>
+                      </div>
+                    ) : (
+                      ''
+                    )}
                     <div class={classes.songContent}>
                       <h2 class={classes.songItemName}>{song.name}</h2>
                       <p class={classes.songItemDesc}>{getSongDesc(song)}</p>

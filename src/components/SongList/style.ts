@@ -3,11 +3,12 @@
  * @Author: linkscope
  * @Date: 2021-02-04 10:56:55
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-04 11:14:04
+ * @LastEditTime: 2021-02-24 16:39:17
  */
 import { createUseStyles } from 'vue-jss'
 import { Font, Color } from '@/assets/variables'
-import { noWrap } from '@/assets/mixin'
+import { noWrap, backgroundImg } from '@/assets/mixin'
+import { compile } from 'vue'
 
 const useStyle = createUseStyles({
   container: {
@@ -98,6 +99,16 @@ const useStyle = createUseStyles({
     alignItems: 'center',
     boxSizing: 'border-box',
     height: 64
+  },
+  songRank: {
+    flex: '0 0 25px',
+    width: 25,
+    marginRight: 30,
+    textAlign: 'center'
+  },
+  songRankText: {
+    color: Color['$color-theme'],
+    fontSize: Font['$font-size-bigger']
   },
   songContent: {
     flex: 1,

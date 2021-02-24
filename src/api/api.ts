@@ -14,7 +14,8 @@ enum Api {
   checkSong = '/check/music',
   getSongUrl = '/song/url',
   getSongDetail = '/song/detail',
-  getLyric = '/lyric'
+  getLyric = '/lyric',
+  getTopList = '/toplist'
 }
 
 export default Api

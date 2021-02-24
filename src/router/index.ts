@@ -53,6 +53,14 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
+    path: '/rank/detail/:id',
+    name: 'RankDetail',
+    component: () => import('@/views/rank/detail'),
+    meta: {
+      title: '排行详情'
+    }
+  },
+  {
     path: '/search',
     name: 'Search',
     component: () => import('@/views/search'),
