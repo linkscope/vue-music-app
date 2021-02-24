@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 21:43:17
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 11:05:48
+ * @LastEditTime: 2021-02-24 16:47:44
  */
 import axios from 'axios'
 
@@ -12,7 +12,8 @@ const request = axios.create({
 })
 
 request.interceptors.request.use((request) => {
-  request.url = '/api' + request.url
+  const prefix = process.env.VUE_APP_API_PRIFIX || '/api'
+  request.url = prefix + request.url
   return request
 })
 
