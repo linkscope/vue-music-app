@@ -1,7 +1,7 @@
 import { defineComponent, Fragment, watch, ref, Transition, computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import animations from 'create-keyframe-animation'
-import lyricParser from 'lyric-parser'
+import lyricParser from '@/utils/lyricParser'
 
 import { IStore, ISong } from '@/types'
 import useStyle from './style'
@@ -49,6 +49,7 @@ export default defineComponent({
     const durationTime = ref(0)
     const lyricRef = ref<lyricParser | null>(null)
     const currentLineLyric = ref(0)
+    const currentPlayLyric = ref('')
     const currentPage = ref('cd')
     const percent = computed(() => currentTime.value / durationTime.value)
     const offsetPosition = computed(() => {
@@ -81,23 +82,28 @@ export default defineComponent({
 
     const onPrevious = () => {
       if (!songReady) return
-      let index = store.state.playingIndex - 1
-      if (!~index) {
-        index = store.state.playList.length - 1
+      // 边界处理
+      if (store.state.playList.length === 1) {
+        audioInstance.value!.currentTime = 0
+        audioInstance.value!.play()
+        lyricRef.value?.seek(0)
+      } else {
+        let index = store.state.playingIndex - 1
+        if (!~index) {
+          index = store.state.playList.length - 1
+        }
+        isNext = false
+        store.commit('SET_PLAYING_INDEX', index)
+        store.commit('SET_IS_PLAYING', true)
+        songReady = true
       }
-      isNext = false
-      store.commit('SET_PLAYING_INDEX', index)
-      store.commit('SET_IS_PLAYING', true)
-      songReady = true
     }
 
     const onEnded = () => {
       if (store.state.playMode === 'loop') {
         audioInstance.value!.currentTime = 0
         audioInstance.value!.play()
-        if (lyricRef.value) {
-          lyricRef.value.seek(0)
-        }
+        lyricRef.value?.seek(0)
       } else {
         onNext()
       }
@@ -109,21 +115,27 @@ export default defineComponent({
         await checkSong(id)
         const { data } = await getSongUrl(id)
         const { songs } = await getSongDetail(id.toString())
-        const { lrc } = await getLyric(id)
-        if (lyricRef.value) {
-          lyricRef.value.stop()
-        }
-        lyricRef.value = new lyricParser(lrc.lyric, ({ lineNum }) => {
-          currentLineLyric.value = lineNum
-          if (lineNum > 5) {
-            const lineInstance = lyricLineInstance.value!.children[lineNum - 5]
-            lyricContainerInstance.value!.scrollToElement(lineInstance, 1000)
-          } else {
-            lyricContainerInstance.value!.scrollTo(0, 0, 1000)
+        const { lrc, nolyric } = await getLyric(id)
+        // 切换歌曲时把之前的歌词计时器关闭 防止出现抖动现象
+        lyricRef.value?.stop()
+        if (!nolyric) {
+          lyricRef.value = new lyricParser(lrc.lyric, ({ lineNum, txt }) => {
+            currentLineLyric.value = lineNum
+            currentPlayLyric.value = txt
+            if (lineNum > 5) {
+              const lineInstance = lyricLineInstance.value!.children[lineNum - 5]
+              lyricContainerInstance.value!.scrollToElement(lineInstance, 1000)
+            } else {
+              lyricContainerInstance.value!.scrollTo(0, 0, 1000)
+            }
+          })
+          if (store.state.isPlaying) {
+            lyricRef.value.play()
           }
-        })
-        if (store.state.isPlaying) {
-          lyricRef.value.play()
+        } else {
+          currentLineLyric.value = -1
+          currentPlayLyric.value = '纯音乐，暂无歌词'
+          lyricRef.value = new lyricParser('纯音乐，暂无歌词')
         }
         songRef.value = songs[0]
         songUrlRef.value = data[0].url
@@ -248,7 +260,10 @@ export default defineComponent({
       () => store.getters.playingSong,
       (nextSong: ISong, prevSong: ISong) => {
         if (!prevSong || nextSong.id !== prevSong.id) {
-          getSong(nextSong.id, isNext)
+          // 解决手机浏览器从后台切换至前台发生的js延迟问题
+          setTimeout(() => {
+            getSong(nextSong.id, isNext)
+          }, 1000)
         }
       }
     )
@@ -278,12 +293,12 @@ export default defineComponent({
           animations.runAnimation(albumInstance.value!, 'rotate')
           animations.runAnimation(miniAlbumInstance.value!, 'rotate')
           audioInstance.value?.play()
-          lyricRef.value!.togglePlay()
+          lyricRef.value?.togglePlay()
         } else {
           albumInstance.value!.style.animationPlayState = 'paused'
           miniAlbumInstance.value!.style.animationPlayState = 'paused'
           audioInstance.value?.pause()
-          lyricRef.value!.stop()
+          lyricRef.value?.stop()
         }
       }
     )
@@ -342,6 +357,9 @@ export default defineComponent({
                         alt=""
                       />
                     </div>
+                  </div>
+                  <div class={classes.playingLyricContainer}>
+                    <div class={classes.playingLyric}>{currentPlayLyric.value}</div>
                   </div>
                 </div>
                 <ScrollView

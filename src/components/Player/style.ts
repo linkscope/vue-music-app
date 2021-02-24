@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-19 09:44:36
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-23 11:23:18
+ * @LastEditTime: 2021-02-24 09:43:10
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -88,6 +88,18 @@ const useStyle = createUseStyles({
     boxSizing: 'border-box',
     border: '10px solid rgba(255, 255, 255, 0.1)',
     borderRadius: '50%'
+  },
+  playingLyricContainer: {
+    width: '80%',
+    margin: '30px auto 0 auto',
+    overflow: 'hidden',
+    textAlign: 'center'
+  },
+  playingLyric: {
+    height: 20,
+    lineHeight: '20px',
+    fontSize: Font['$font-size-small'],
+    color: Color['$color-text-light']
   },
   contentRight: {
     display: 'inline-block',

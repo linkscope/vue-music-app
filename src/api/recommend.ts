@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 21:45:00
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 13:49:10
+ * @LastEditTime: 2021-02-24 11:34:29
  */
 import request from './request'
 import Api from './api'
@@ -24,11 +24,16 @@ export function getBannerList(
   })
 }
 
-export function getRecommendList(): Promise<{
+export function getRecommendList(
+  limit = 100
+): Promise<{
   result: IRecommend[]
 }> {
   return request({
     url: Api.getRecommendList,
-    method: 'get'
+    method: 'get',
+    params: {
+      limit
+    }
   })
 }

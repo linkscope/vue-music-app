@@ -1,4 +1,4 @@
-import { computed, defineComponent, onMounted, reactive, Transition, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, Transition, ref, onActivated } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
@@ -12,7 +12,7 @@ import SongList from '@/components/SongList'
  * @Author: linkscope
  * @Date: 2021-02-03 10:20:12
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-04 10:47:08
+ * @LastEditTime: 2021-02-24 11:18:53
  */
 export default defineComponent({
   name: 'SingerDetail',
@@ -30,6 +30,22 @@ export default defineComponent({
     })
     const loading = ref(false)
 
+    const getSong = async () => {
+      if (!store.state.singerInfo) {
+        router.back()
+        return
+      }
+      loading.value = true
+      try {
+        const { songs, total } = await getSongList(singerInfo.value!.id)
+        songInfo.songList = songs
+        songInfo.total = total
+        loading.value = false
+      } catch {
+        loading.value = false
+      }
+    }
+
     const onPullUp = async () => {
       const { songList, total } = songInfo
       if (songList.length < total) {
@@ -44,21 +60,9 @@ export default defineComponent({
       }
     }
 
-    onMounted(async () => {
-      if (!store.state.singerInfo) {
-        router.back()
-        return
-      }
-      loading.value = true
-      try {
-        const { songs, total } = await getSongList(singerInfo.value!.id)
-        songInfo.songList = songs
-        songInfo.total = total
-        loading.value = false
-      } catch {
-        loading.value = false
-      }
-    })
+    onMounted(() => getSong())
+
+    onActivated(() => getSong())
 
     return () => {
       const classes = classesRef.value

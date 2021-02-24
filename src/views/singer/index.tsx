@@ -5,6 +5,7 @@ import cnchar from 'cnchar'
 
 import { getSingerList } from '@/api/singer'
 import { ISinger, IStore } from '@/types'
+import usePlayListHeight from '@/hooks/usePlayListHeight'
 import useStyle from './style'
 
 import ScrollView from '@/components/ScrollView'
@@ -40,6 +41,13 @@ export default defineComponent({
     const scrollInstance = ref()
     const singerListInstance = ref()
     const fixTitleInstance = ref<HTMLDivElement | null>(null)
+    const singerContainerInstance = ref<HTMLDivElement | null>(null)
+
+    usePlayListHeight((playList) => {
+      const bottom = playList.length > 0 ? '60px' : ''
+      singerContainerInstance.value!.style.bottom = bottom
+      scrollInstance.value!.onRefresh()
+    })
 
     const onTouchMoveElement = (index: number) => {
       if (index < 0 || index >= heightList.length - 1) return
@@ -147,7 +155,7 @@ export default defineComponent({
       const shortcutList = shortcutListRef.value
       return (
         <Fragment>
-          <div class={classes.container}>
+          <div ref={singerContainerInstance} class={classes.container}>
             <ScrollView
               ref={scrollInstance}
               listenScroll

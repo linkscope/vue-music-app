@@ -3,12 +3,13 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:31
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-03 20:52:11
+ * @LastEditTime: 2021-02-24 11:32:40
  */
 import { defineComponent, onMounted, ref } from 'vue'
 
 import { IBanner, IRecommend } from '@/types'
 import { getBannerList, getRecommendList } from '@/api/recommend'
+import userPlayerListHeight from '@/hooks/usePlayListHeight'
 import useStyle from './style'
 
 import Banner from './components/Banner'
@@ -26,6 +27,13 @@ export default defineComponent({
     const bannerListRef = ref<IBanner[]>([])
     const recommendListRef = ref<IRecommend[]>([])
     const scrollViewInstance = ref()
+    const singerContainerInstance = ref<HTMLDivElement | null>(null)
+
+    userPlayerListHeight((playList) => {
+      const bottom = playList.length > 0 ? '60px' : ''
+      singerContainerInstance.value!.style.bottom = bottom
+      scrollViewInstance.value!.onRefresh()
+    })
 
     onMounted(async () => {
       const recommendListResult = await getRecommendList()
@@ -49,7 +57,7 @@ export default defineComponent({
       const bannerList = bannerListRef.value
       const recommendList = recommendListRef.value
       return (
-        <div class={classes.container}>
+        <div ref={singerContainerInstance} class={classes.container}>
           <ScrollView
             ref={scrollViewInstance}
             class={classes.scrollViewWrapper}

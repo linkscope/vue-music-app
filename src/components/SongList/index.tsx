@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-03 11:20:50
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-23 10:18:17
+ * @LastEditTime: 2021-02-24 11:19:19
  */
 import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -11,6 +11,7 @@ import { useStore } from 'vuex'
 
 import { ISong } from '@/types'
 import { transformStyle } from '@/utils'
+import usePlayListHeight from '@/hooks/usePlayListHeight'
 import useStyle from './style'
 
 import Icon from '@/components/Icon'
@@ -52,6 +53,12 @@ export default defineComponent({
     const scrollViewInstance = ref()
     const backgroundImgInstance = ref<HTMLDivElement | null>()
     const playBtnInstance = ref<HTMLDivElement | null>()
+
+    usePlayListHeight((playList) => {
+      const bottom = playList.length > 0 ? '60px' : ''
+      scrollViewInstance.value!.$el.style.bottom = bottom
+      scrollViewInstance.value!.onRefresh()
+    })
 
     const getSongDesc = (song: ISong) => {
       const artists: string[] = []

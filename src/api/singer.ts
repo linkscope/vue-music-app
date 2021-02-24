@@ -92,6 +92,7 @@ export function getLyric(
   lrc: {
     lyric: string
   }
+  nolyric?: boolean
 }> {
   return request({
     url: Api.getLyric,
