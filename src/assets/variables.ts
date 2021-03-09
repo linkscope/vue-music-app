@@ -3,12 +3,12 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:56:52
  * @LastEditors: linkscope
- * @LastEditTime: 2021-01-29 19:25:38
+ * @LastEditTime: 2021-03-08 16:59:40
  */
 export enum Color {
   '$color-background' = '#222',
   '$color-background-dark' = 'rgba(0, 0, 0, 0.3)',
-  '$color-highlight-background' = '#333',
+  '$color-highlight-background' = '#ebecec',
   '$color-dialog-background' = '#666',
   '$color-theme' = '#d93f30',
   '$color-theme-dark' = 'rgba(255, 0, 0, 0.5)',

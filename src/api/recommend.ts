@@ -3,11 +3,11 @@
  * @Author: linkscope
  * @Date: 2021-01-28 21:45:00
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-24 14:14:34
+ * @LastEditTime: 2021-03-08 15:39:46
  */
 import request from './request'
 import Api from './api'
-import { IBanner, IRecommend } from '@/types'
+import { IBanner, IRecommend, IPlayList } from '@/types'
 
 export function getBannerList(
   type: number
@@ -25,7 +25,7 @@ export function getBannerList(
 }
 
 export function getRecommendList(
-  limit = 100
+  limit = 20
 ): Promise<{
   result: IRecommend[]
 }> {
@@ -41,15 +41,7 @@ export function getRecommendList(
 export function getRecommendDetail(
   id: number
 ): Promise<{
-  playlist: {
-    coverImgUrl: string
-    id: number
-    description: string
-    name: string
-    trackIds: {
-      id: number
-    }[]
-  }
+  playlist: IPlayList
 }> {
   return request({
     url: Api.getReccomendDetail,

@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 21:45:46
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-24 14:06:48
+ * @LastEditTime: 2021-03-09 14:01:09
  */
 enum Api {
   getBanner = '/banner',
@@ -15,7 +15,9 @@ enum Api {
   getSongUrl = '/song/url',
   getSongDetail = '/song/detail',
   getLyric = '/lyric',
-  getTopList = '/toplist'
+  getTopList = '/toplist',
+  getHotKeyList = '/search/hot',
+  searchSuggest = '/search/suggest'
 }
 
 export default Api

@@ -176,13 +176,9 @@ export default defineComponent({
                 activeIndex={currentIndexRef.value}
               />
             </div>
-            {scrollYRef.value > 0 ? (
-              ''
-            ) : (
-              <div ref={fixTitleInstance} class={classes.titleFixedWrapper}>
-                <h1 class={classes.titleFixed}>{singerList[currentIndexRef.value]?.title || ''}</h1>
-              </div>
-            )}
+            <div ref={fixTitleInstance} class={classes.titleFixedWrapper}>
+              <h1 class={classes.titleFixed}>{singerList[currentIndexRef.value]?.title || ''}</h1>
+            </div>
           </div>
         </Fragment>
       )
