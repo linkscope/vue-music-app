@@ -7,8 +7,7 @@
  */
 import { createUseStyles } from 'vue-jss'
 import { Font, Color } from '@/assets/variables'
-import { noWrap, backgroundImg } from '@/assets/mixin'
-import { compile } from 'vue'
+import { noWrap } from '@/assets/mixin'
 
 const useStyle = createUseStyles({
   container: {
@@ -93,38 +92,6 @@ const useStyle = createUseStyles({
     top: 0,
     bottom: 0,
     width: '100%'
-  },
-  songItem: {
-    display: 'flex',
-    alignItems: 'center',
-    boxSizing: 'border-box',
-    height: 64
-  },
-  songRank: {
-    flex: '0 0 25px',
-    width: 25,
-    marginRight: 30,
-    textAlign: 'center'
-  },
-  songRankText: {
-    color: Color['$color-theme'],
-    fontSize: Font['$font-size-bigger']
-  },
-  songContent: {
-    flex: 1,
-    lineHeight: '20px',
-    overflow: 'hidden'
-  },
-  songItemName: {
-    ...(noWrap as any),
-    color: Color['$color-text'],
-    fontSize: Font['$font-size-small']
-  },
-  songItemDesc: {
-    ...(noWrap as any),
-    marginTop: 4,
-    color: Color['$color-text-dark'],
-    fontSize: Font['$font-size-smaller']
   },
   loadingContainer: {
     position: 'fixed',

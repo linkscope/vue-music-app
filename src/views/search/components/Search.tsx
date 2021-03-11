@@ -3,14 +3,13 @@
  * @Author: linkscope
  * @Date: 2021-03-08 16:48:57
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-08 17:24:20
+ * @LastEditTime: 2021-03-11 10:08:12
  */
 import { defineComponent, PropType, ref, computed } from 'vue'
 import { createUseStyles } from 'vue-jss'
 
 import { Color, Font } from '@/assets/variables'
 import Icon from '@/components/Icon'
-import search from '..'
 
 const useStyle = createUseStyles({
   searchContainer: {
@@ -44,6 +43,18 @@ export default defineComponent({
     },
     modelValue: {
       type: String as PropType<string>
+    },
+    onEnter: {
+      type: Function as PropType<(event: KeyboardEvent) => void>,
+      default: () => ''
+    },
+    onFocus: {
+      type: Function as PropType<() => void>,
+      default: () => ''
+    },
+    onBlur: {
+      type: Function as PropType<() => void>,
+      default: () => ''
     }
   },
   setup(props, { emit }) {
@@ -54,30 +65,42 @@ export default defineComponent({
       set: (value) => emit('update:modelValue', value)
     })
 
-    return () => {
-      const classes = classesRef.value
-      const { placeholder } = props
-      return (
-        <div class={classes.searchContainer}>
-          <Icon color={Color['$color-background']} icon="sousuo" style="font-size: 16px" />
-          <input
-            ref={inputInstance}
-            class={classes.searchInput}
-            type="text"
-            placeholder={placeholder}
-            v-model={search.value}
-          />
-          <div
-            v-show={search.value}
-            onClick={() => {
-              search.value = ''
-              inputInstance.value!.focus()
-            }}
-          >
-            <Icon color={Color['$color-background']} icon="shanchu3" style="font-size: 14px" />
-          </div>
-        </div>
-      )
+    return {
+      inputInstance,
+      search,
+      classes: classesRef
     }
+  },
+  render() {
+    const { placeholder, onEnter, onFocus, onBlur } = this.$props
+    return (
+      <div class={this.classes.searchContainer}>
+        <Icon color={Color['$color-background']} icon="sousuo" style="font-size: 16px" />
+        <input
+          ref="inputInstance"
+          class={this.classes.searchInput}
+          type="text"
+          placeholder={placeholder}
+          v-model={this.search}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          onKeypress={(event) => {
+            if (event.code === 'Enter') {
+              onEnter(event)
+              this.inputInstance!.blur()
+            }
+          }}
+        />
+        <div
+          v-show={this.search}
+          onClick={() => {
+            this.search = ''
+            this.inputInstance!.focus()
+          }}
+        >
+          <Icon color={Color['$color-background']} icon="shanchu3" style="font-size: 14px" />
+        </div>
+      </div>
+    )
   }
 })

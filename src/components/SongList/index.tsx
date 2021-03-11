@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-03 11:20:50
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-24 16:40:04
+ * @LastEditTime: 2021-03-11 10:28:05
  */
 import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -17,6 +17,7 @@ import useStyle from './style'
 import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
 import Loading from '@/components/Loading'
+import SongListItem from './SongListItem'
 
 // scroll滚动可以覆盖掉背景图的距离
 let scrollDiff = -1
@@ -63,12 +64,6 @@ export default defineComponent({
       scrollViewInstance.value!.$el.style.bottom = bottom
       scrollViewInstance.value!.onRefresh()
     })
-
-    const getSongDesc = (song: ISong) => {
-      const artists: string[] = []
-      song.ar.forEach((item) => artists.push(item.name))
-      return `${artists.join('/')} - ${song.al.name}`
-    }
 
     const onScroll = (x: number, y: number) => {
       scrollYRef.value = y
@@ -147,19 +142,7 @@ export default defineComponent({
             >
               <ul style="padding: 20px 30px; background-color: #fff">
                 {songList.map((song, index) => (
-                  <li key={song.id} class={classes.songItem} onClick={() => selectSong(index)}>
-                    {isRank ? (
-                      <div class={classes.songRank}>
-                        <span class={classes.songRankText}>{index + 1}</span>
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                    <div class={classes.songContent}>
-                      <h2 class={classes.songItemName}>{song.name}</h2>
-                      <p class={classes.songItemDesc}>{getSongDesc(song)}</p>
-                    </div>
-                  </li>
+                  <SongListItem key={song.id} onSelectSong={selectSong} index={index} song={song} />
                 ))}
               </ul>
               <div v-show={loading} class={classes.loadingContainer}>

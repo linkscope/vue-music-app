@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 18:26:10
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-08 15:46:05
+ * @LastEditTime: 2021-03-10 16:07:00
  */
 import { RouteLocation, NavigationFailure } from 'vue-router'
 
@@ -56,6 +56,14 @@ export interface IPlayList {
     id: number
   }[]
 }
+
+export interface IAlbum {
+  id: number
+  name: string
+  picUrl: string
+  artist: ISinger
+}
+
 export interface ISinger {
   id: number
   name: string

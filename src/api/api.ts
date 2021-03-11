@@ -17,7 +17,9 @@ enum Api {
   getLyric = '/lyric',
   getTopList = '/toplist',
   getHotKeyList = '/search/hot',
-  searchSuggest = '/search/suggest'
+  searchSuggest = '/search/suggest',
+  search = '/search/multimatch',
+  searchSongs = '/cloudsearch'
 }
 
 export default Api
