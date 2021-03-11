@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-19 09:39:13
+ * @LastEditTime: 2021-03-11 11:38:04
  */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
@@ -66,6 +66,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/views/search'),
     meta: {
       title: '搜索'
+    }
+  },
+  {
+    path: '/album/:id',
+    name: 'Album',
+    component: () => import('@/views/albums'),
+    meta: {
+      title: '专辑详情'
     }
   }
 ]

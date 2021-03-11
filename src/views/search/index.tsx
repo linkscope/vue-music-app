@@ -3,9 +3,11 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:27
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-11 10:55:25
+ * @LastEditTime: 2021-03-11 12:07:16
  */
 import { defineComponent, onMounted, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 import { ISong } from '@/types'
 import useStyle from './style'
@@ -39,12 +41,14 @@ export type searchMatchingType = {
   name: string
   picUrl: string
   description?: string
-}[]
+}
 
 export default defineComponent({
   name: 'Search',
   setup() {
     const classesRef = useStyle()
+    const router = useRouter()
+    const store = useStore()
     const searchValue = ref('')
     const isFocus = ref(false)
     const hotKeyListRef = ref<
@@ -53,7 +57,7 @@ export default defineComponent({
       }[]
     >([])
     const suggestSearchList = ref<searchSuggestListType>([])
-    const matchSearchList = ref<searchMatchingType>([])
+    const matchSearchList = ref<searchMatchingType[]>([])
     const songList = ref<ISong[]>([])
     const searchSongCount = ref(0)
     const loading = ref(false)
@@ -82,7 +86,7 @@ export default defineComponent({
     }
 
     const normalizeMatchList = (result: searchType) => {
-      const matchList: searchMatchingType = []
+      const matchList: searchMatchingType[] = []
       result.orders.map((item) => {
         switch (item) {
           case 'artist':
@@ -140,6 +144,25 @@ export default defineComponent({
       }
     }
 
+    const goMatchDetail = (match: searchMatchingType) => {
+      if (match.name.startsWith('歌手')) {
+        router.push(`/singer/detail/${match.id}`)
+        store.commit('SET_SINGER_INFO', {
+          id: match.id,
+          title: match.name.substr(3),
+          avatar: match.picUrl
+        })
+      } else if (match.name.startsWith('歌单')) {
+        router.push({
+          path: `/recommend/detail/${match.id}`
+        })
+      } else {
+        router.push({
+          path: `/album/${match.id}`
+        })
+      }
+    }
+
     onMounted(async () => {
       const { result } = await getHotKeyList()
       hotKeyListRef.value = result.hots
@@ -193,10 +216,15 @@ export default defineComponent({
               onPullUp={onPullUp}
             >
               <div>
-                <MatchList matchList={matchSearchList.value} />
+                <MatchList matchList={matchSearchList.value} onClick={goMatchDetail} />
                 <ul style="padding-left: 10px">
                   {songList.value.map((song, index) => (
-                    <SongListItem key={song.id} song={song} index={index} />
+                    <SongListItem
+                      key={song.id}
+                      song={song}
+                      index={index}
+                      onSelectSong={() => store.dispatch('dispatchInsertSong', song)}
+                    />
                   ))}
                 </ul>
               </div>

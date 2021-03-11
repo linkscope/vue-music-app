@@ -91,3 +91,18 @@ export function searchSongs(
     }
   })
 }
+
+export function getAlbum(
+  id: number
+): Promise<{
+  album: IAlbum
+  songs: ISong[]
+}> {
+  return request({
+    url: Api.getAlbums,
+    method: 'get',
+    params: {
+      id
+    }
+  })
+}

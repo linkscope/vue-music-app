@@ -48,21 +48,25 @@ export default defineComponent({
   name: 'SearchMatchList',
   props: {
     matchList: {
-      type: Array as PropType<searchMatchingType>,
+      type: Array as PropType<searchMatchingType[]>,
       required: true
+    },
+    onClick: {
+      type: Function as PropType<(item: searchMatchingType) => void>,
+      default: () => ''
     }
   },
   setup(props) {
     const classesRef = useStyle()
     return () => {
       const classes = classesRef.value
-      const { matchList } = props
+      const { matchList, onClick } = props
       return (
         <>
           <h1 class={classes.title}>最佳匹配</h1>
           <ul>
             {matchList.map((item) => (
-              <li class={classes.item} key={item.id}>
+              <li class={classes.item} key={item.id} onClick={() => onClick(item)}>
                 <img src={item.picUrl} height="50" width="50" alt="" />
                 <div class={classes.name}>
                   {item.name}

@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-23 10:22:34
+ * @LastEditTime: 2021-03-11 12:15:30
  */
 import { createStore, createLogger } from 'vuex'
 import { IStore, ISong } from '@/types'
@@ -85,12 +85,35 @@ export default createStore<IStore>({
       commit('SET_PLAYING_INDEX', 0)
       commit('SET_IS_FULL_SCREEN', true)
       commit('SET_IS_PLAYING', true)
+    },
+    dispatchInsertSong({ commit, state }, song: ISong) {
+      const playList = state.sequenceList
+      let playingIndex = state.playingIndex
+      // 当前是否有播放列表
+      if (playList.length) {
+        const findIndex = playList.findIndex((item: ISong) => item.id === song.id)
+        // 当前列表是否已经有待插入歌曲
+        if (~findIndex) {
+          playingIndex = findIndex
+        } else {
+          playList.splice(playingIndex + 1, 0, song)
+          playingIndex++
+        }
+      } else {
+        playList.push(song)
+        playingIndex = 0
+      }
+      commit('SET_PLAY_MODE', 'sequence')
+      commit('SET_SEQUENCE_LIST', playList)
+      commit('SET_PLAY_LIST', playList)
+      commit('SET_PLAYING_INDEX', playingIndex)
+      commit('SET_IS_FULL_SCREEN', true)
+      commit('SET_IS_PLAYING', true)
     }
   },
   modules: {},
   getters: {
     playingSong: (state) => state.playList[state.playingIndex]
   },
-  strict: process.env.NODE_ENV !== 'production',
   plugins: [createLogger()]
 })
