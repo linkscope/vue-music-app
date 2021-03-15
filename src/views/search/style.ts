@@ -38,17 +38,6 @@ const useStyle = createUseStyles({
     borderRadius: 6,
     backgroundColor: Color['$color-highlight-background'],
     fontSize: Font['$font-size-small']
-  },
-  loadingContainer: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    zIndex: 50,
-    backgroundColor: Color['$color-background-dark']
   }
 })
 

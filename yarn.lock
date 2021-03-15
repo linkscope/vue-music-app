@@ -806,6 +806,13 @@
     "@babel/types" "^7.4.4"
     esutils "^2.0.2"
 
+"@babel/runtime@7.x", "@babel/runtime@^7.0.0":
+  version "7.13.10"
+  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.13.10.tgz#47d42a57b6095f4468da440388fdbad8bebf0d7d"
+  integrity sha512-4QPkjJq6Ns3V/RgpEahRk+AGfL0eO6RHHtTWoNNr5mO49G6B5+X6d6THgWEAvTrznU5xYpbAlVKRYcsCgh/Akw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/runtime@^7.11.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.8.3", "@babel/runtime@^7.8.4":
   version "7.12.5"
   resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.12.5.tgz?cache=0&sync_timestamp=1604441112982&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
@@ -976,6 +983,11 @@
   dependencies:
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
+
+"@popperjs/core@^2.5.4":
+  version "2.9.1"
+  resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.9.1.tgz#7f554e7368c9ab679a11f4a042ca17149d70cf12"
+  integrity sha512-DvJbbn3dUgMxDnJLH+RZQPnXak1h4ZVYQ7CWiFWjQwBFkVajT4rfw2PdpHLTSTwxrYfnoEXkuBiwkDm6tPMQeA==
 
 "@samverschueren/stream-to-observable@^0.3.0":
   version "0.3.1"
@@ -1273,6 +1285,30 @@
     lodash "^4.17.15"
     semver "^7.3.2"
     tsutils "^3.17.1"
+
+"@vant/icons@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.npmjs.org/@vant/icons/-/icons-1.5.3.tgz#b7779f67bf608d417a82452fbede406dfa46b439"
+  integrity sha512-OQaJqAWN6quHicWje4buknX9zcDo3UDy3X4nrk/ldnr9Fj8Str4nMtQbMbIrCMtmjQdP2ei769uuY508dudrjA==
+
+"@vant/lazyload@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/@vant/lazyload/-/lazyload-1.0.4.tgz#f1bbd81217cf416a377ab2f928f2a147a4489259"
+  integrity sha512-136iCVmYCV6NUJwIcm0NRsLNGA0xAObCMV1txSurA3P2qbSBSR/x5OLaHVHPaCJDr+jn99IX9r9mfwBO+IxWxw==
+
+"@vant/popperjs@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.npmjs.org/@vant/popperjs/-/popperjs-1.0.4.tgz#49c20809a3828e7b036e23d50fb56121e997618f"
+  integrity sha512-bqbmOoX0kYexGw65awNX9wxePR0ZIdTlVP+7JRahrbUjKW0+HxC2T27NE90cCDmqiFL/6+QYazhLvVa436jV0A==
+  dependencies:
+    "@popperjs/core" "^2.5.4"
+
+"@vant/use@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/@vant/use/-/use-1.0.5.tgz#44bee952ebccf9396414a51c4d4b458434a9de23"
+  integrity sha512-Zf7t/KO9K6WjPUC+75KB8yTAauoSLAcTzxYCLjdMbbiCRG/oDfb5qTmaka2Hr5cV6k7cEa1cNBXCy+0UMcZNbQ==
+  dependencies:
+    "@babel/runtime" "7.x"
 
 "@vue/babel-helper-vue-jsx-merge-props@^1.2.1":
   version "1.2.1"
@@ -2154,6 +2190,14 @@ babel-plugin-dynamic-import-node@^2.3.3:
   integrity sha1-hP2hnJduxcbe/vV/lCez3vZuF6M=
   dependencies:
     object.assign "^4.1.0"
+
+babel-plugin-import@^1.13.3:
+  version "1.13.3"
+  resolved "https://registry.npmjs.org/babel-plugin-import/-/babel-plugin-import-1.13.3.tgz#9dbbba7d1ac72bd412917a830d445e00941d26d7"
+  integrity sha512-1qCWdljJOrDRH/ybaCZuDgySii4yYrtQ8OJQwrcDqdt0y67N30ng3X3nABg6j7gR7qUJgcMa9OMhc4AGViDwWw==
+  dependencies:
+    "@babel/helper-module-imports" "^7.0.0"
+    "@babel/runtime" "^7.0.0"
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -9327,6 +9371,17 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+vant@^3.0.9:
+  version "3.0.9"
+  resolved "https://registry.npmjs.org/vant/-/vant-3.0.9.tgz#f946775001a834ce27843fc9fa25414368266a78"
+  integrity sha512-yK67x1ks/F+rKNglToOiucE3I0d/wqh3IE8gVsAdLNVZ3loR57/dkg2DhvTVkHJsts2Hwb81P46qPrKgy0m3Hg==
+  dependencies:
+    "@babel/runtime" "7.x"
+    "@vant/icons" "^1.5.3"
+    "@vant/lazyload" "^1.0.4"
+    "@vant/popperjs" "^1.0.4"
+    "@vant/use" "^1.0.5"
 
 vary@~1.1.2:
   version "1.1.2"

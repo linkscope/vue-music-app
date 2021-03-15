@@ -34,22 +34,15 @@ export default defineComponent({
       trackIds: []
     })
     const rankSongList = ref<ISong[]>([])
-    const loading = ref(false)
 
     const getSong = async () => {
-      loading.value = true
-      try {
-        const { playlist } = await getRecommendDetail(+route.params.id!)
-        rankDetail.coverImgUrl = playlist.coverImgUrl
-        rankDetail.id = playlist.id
-        rankDetail.name = playlist.name
-        rankDetail.trackIds = playlist.trackIds.map((item) => item.id)
-        const { songs } = await getSongDetail(rankDetail.trackIds.toString())
-        rankSongList.value = songs
-        loading.value = false
-      } catch {
-        loading.value = false
-      }
+      const { playlist } = await getRecommendDetail(+route.params.id!)
+      rankDetail.coverImgUrl = playlist.coverImgUrl
+      rankDetail.id = playlist.id
+      rankDetail.name = playlist.name
+      rankDetail.trackIds = playlist.trackIds.map((item) => item.id)
+      const { songs } = await getSongDetail(rankDetail.trackIds.toString())
+      rankSongList.value = songs
     }
 
     onMounted(() => getSong())
@@ -67,7 +60,6 @@ export default defineComponent({
         >
           <SongList
             isRank
-            loading={loading.value}
             title={rankDetail.name}
             bgImg={rankDetail.coverImgUrl}
             songList={rankSongList.value}

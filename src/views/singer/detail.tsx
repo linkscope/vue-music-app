@@ -28,35 +28,22 @@ export default defineComponent({
       songList: [],
       total: 0
     })
-    const loading = ref(false)
 
     const getSong = async () => {
       if (!store.state.singerInfo) {
         router.back()
         return
       }
-      loading.value = true
-      try {
-        const { songs, total } = await getSongList(singerInfo.value!.id)
-        songInfo.songList = songs
-        songInfo.total = total
-        loading.value = false
-      } catch {
-        loading.value = false
-      }
+      const { songs, total } = await getSongList(singerInfo.value!.id)
+      songInfo.songList = songs
+      songInfo.total = total
     }
 
     const onPullUp = async () => {
       const { songList, total } = songInfo
       if (songList.length < total) {
-        loading.value = true
-        try {
-          const { songs } = await getSongList(singerInfo.value!.id, songList.length + 1)
-          songInfo.songList = songList.concat(songs)
-          loading.value = false
-        } catch {
-          loading.value = false
-        }
+        const { songs } = await getSongList(singerInfo.value!.id, songList.length + 1)
+        songInfo.songList = songList.concat(songs)
       }
     }
 
@@ -74,7 +61,6 @@ export default defineComponent({
           leaveToClass={classes.slideTo}
         >
           <SongList
-            loading={loading.value}
             title={singerInfo.value?.title || ''}
             bgImg={singerInfo.value?.avatar || ''}
             songList={songInfo.songList}

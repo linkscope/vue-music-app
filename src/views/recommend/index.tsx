@@ -16,7 +16,6 @@ import useStyle from './style'
 import Banner from './components/Banner'
 import RecommendList from './components/RecommendList'
 import ScrollView from '@/components/ScrollView'
-import Loading from '@/components/Loading'
 
 // 检查banner轮播是否成功渲染
 let checkLoaded = false
@@ -78,9 +77,6 @@ export default defineComponent({
                   })
                 }
               />
-            </div>
-            <div class={classes.scrollViewWrapper} v-show={!recommendList.length}>
-              <Loading />
             </div>
           </ScrollView>
         </div>

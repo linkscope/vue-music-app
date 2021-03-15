@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 18:26:10
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-10 16:07:00
+ * @LastEditTime: 2021-03-15 10:22:17
  */
 import { RouteLocation, NavigationFailure } from 'vue-router'
 
@@ -21,6 +21,7 @@ export interface IRouterLinkSlot {
 }
 
 export interface IStore {
+  isLoading: boolean
   singerInfo: {
     id: number
     title: string

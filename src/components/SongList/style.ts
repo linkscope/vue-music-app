@@ -92,17 +92,6 @@ const useStyle = createUseStyles({
     top: 0,
     bottom: 0,
     width: '100%'
-  },
-  loadingContainer: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    zIndex: 50,
-    backgroundColor: Color['$color-background-dark']
   }
 })
 

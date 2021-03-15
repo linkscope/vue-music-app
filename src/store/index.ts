@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-11 12:15:30
+ * @LastEditTime: 2021-03-15 10:21:58
  */
 import { createStore, createLogger } from 'vuex'
 import { IStore, ISong } from '@/types'
@@ -11,6 +11,7 @@ import { shuffleArray } from '@/utils'
 
 export default createStore<IStore>({
   state: {
+    isLoading: false,
     singerInfo: null,
     isPlaying: false,
     isFullScreen: false,
@@ -20,6 +21,9 @@ export default createStore<IStore>({
     playingIndex: -1
   },
   mutations: {
+    SET_IS_LOADING(state, isLoading: boolean) {
+      state.isLoading = isLoading
+    },
     SET_SINGER_INFO(
       state,
       singerInfo: {

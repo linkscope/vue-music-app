@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-03-08 16:48:57
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-11 10:08:12
+ * @LastEditTime: 2021-03-15 09:59:24
  */
 import { defineComponent, PropType, ref, computed } from 'vue'
 import { createUseStyles } from 'vue-jss'
@@ -51,10 +51,6 @@ export default defineComponent({
     onFocus: {
       type: Function as PropType<() => void>,
       default: () => ''
-    },
-    onBlur: {
-      type: Function as PropType<() => void>,
-      default: () => ''
     }
   },
   setup(props, { emit }) {
@@ -72,7 +68,7 @@ export default defineComponent({
     }
   },
   render() {
-    const { placeholder, onEnter, onFocus, onBlur } = this.$props
+    const { placeholder, onEnter, onFocus } = this.$props
     return (
       <div class={this.classes.searchContainer}>
         <Icon color={Color['$color-background']} icon="sousuo" style="font-size: 16px" />
@@ -83,13 +79,7 @@ export default defineComponent({
           placeholder={placeholder}
           v-model={this.search}
           onFocus={onFocus}
-          onBlur={onBlur}
-          onKeypress={(event) => {
-            if (event.code === 'Enter') {
-              onEnter(event)
-              this.inputInstance!.blur()
-            }
-          }}
+          onKeypress={(event) => (event.key === 'Enter' ? onEnter(event) : '')}
         />
         <div
           v-show={this.search}

@@ -16,7 +16,6 @@ import useStyle from './style'
 
 import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
-import Loading from '@/components/Loading'
 import SongListItem from './SongListItem'
 
 // scroll滚动可以覆盖掉背景图的距离
@@ -40,10 +39,6 @@ export default defineComponent({
     onPullUp: {
       type: Function as PropType<() => void>,
       default: () => ''
-    },
-    loading: {
-      type: Boolean as PropType<boolean>,
-      default: false
     },
     isRank: {
       type: Boolean as PropType<boolean>,
@@ -108,7 +103,7 @@ export default defineComponent({
 
     return () => {
       const classes = classesRef.value
-      const { title, bgImg, songList, loading, onPullUp, isRank } = props
+      const { title, bgImg, songList, onPullUp } = props
       return (
         <div class={classes.container}>
           <div class={classes.iconWrapper} onClick={() => router.back()}>
@@ -145,9 +140,6 @@ export default defineComponent({
                   <SongListItem key={song.id} onSelectSong={selectSong} index={index} song={song} />
                 ))}
               </ul>
-              <div v-show={loading} class={classes.loadingContainer}>
-                <Loading />
-              </div>
             </ScrollView>
           </div>
         </div>

@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:27
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-11 12:07:16
+ * @LastEditTime: 2021-03-15 10:12:32
  */
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -26,7 +26,6 @@ import SuggestList from './components/SuggestList'
 import MatchList from './components/MatchList'
 import ScrollView from '@/components/ScrollView'
 import SongListItem from '@/components/SongList/SongListItem'
-import Loading from '@/components/Loading'
 
 let T = 0
 
@@ -60,9 +59,9 @@ export default defineComponent({
     const matchSearchList = ref<searchMatchingType[]>([])
     const songList = ref<ISong[]>([])
     const searchSongCount = ref(0)
-    const loading = ref(false)
     const containerInstance = ref<HTMLDivElement | null>(null)
     const scrollViewInstance = ref()
+    const searchInstance = ref()
 
     userPlayerListHeight((playList) => {
       const bottom = playList.length > 0 ? '60px' : ''
@@ -133,14 +132,8 @@ export default defineComponent({
 
     const onPullUp = async () => {
       if (songList.value.length < searchSongCount.value) {
-        loading.value = true
-        try {
-          const { result } = await searchSongs(searchValue.value, songList.value.length)
-          songList.value = songList.value.concat(result.songs)
-          loading.value = false
-        } catch {
-          loading.value = false
-        }
+        const { result } = await searchSongs(searchValue.value, songList.value.length)
+        songList.value = songList.value.concat(result.songs)
       }
     }
 
@@ -176,6 +169,7 @@ export default defineComponent({
         songList.value = []
         return
       }
+      if (!isFocus.value) return
       if (T) {
         clearTimeout(T)
       }
@@ -192,10 +186,14 @@ export default defineComponent({
         <>
           <div class={classes.searchContainer}>
             <Search
+              ref={searchInstance}
               v-model={searchValue.value}
-              onEnter={() => onSearch(searchValue.value)}
+              onEnter={() => {
+                searchInstance.value.inputInstance.blur()
+                isFocus.value = false
+                onSearch(searchValue.value)
+              }}
               onFocus={() => (isFocus.value = true)}
-              onBlur={() => (isFocus.value = false)}
             />
           </div>
           <div ref={containerInstance} class={classes.container}>
@@ -204,6 +202,7 @@ export default defineComponent({
               suggestList={suggestSearchList.value}
               onClick={(name) => {
                 searchValue.value = name
+                isFocus.value = false
                 onSearch(name)
               }}
             />
@@ -245,9 +244,6 @@ export default defineComponent({
                   </li>
                 ))}
               </ul>
-            </div>
-            <div v-show={loading.value} class={classes.loadingContainer}>
-              <Loading />
             </div>
           </div>
         </>

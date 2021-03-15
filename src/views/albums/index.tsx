@@ -39,18 +39,11 @@ export default defineComponent({
       }
     })
     const songList = ref<ISong[]>([])
-    const loading = ref(false)
 
     const getSong = async () => {
-      loading.value = true
-      try {
-        const result = await getAlbum(+route.params.id!)
-        album.value = result.album
-        songList.value = result.songs
-        loading.value = false
-      } catch {
-        loading.value = false
-      }
+      const result = await getAlbum(+route.params.id!)
+      album.value = result.album
+      songList.value = result.songs
     }
 
     onMounted(() => getSong())
@@ -66,12 +59,7 @@ export default defineComponent({
           enterFromClass={classes.slideTo}
           leaveToClass={classes.slideTo}
         >
-          <SongList
-            loading={loading.value}
-            title={album.value.name}
-            bgImg={album.value.picUrl}
-            songList={songList.value}
-          />
+          <SongList title={album.value.name} bgImg={album.value.picUrl} songList={songList.value} />
         </Transition>
       )
     }

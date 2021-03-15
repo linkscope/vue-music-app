@@ -10,6 +10,19 @@ html {
   height: 100%;
 }
 
+.loading-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 999;
+}
+
 ul {
   padding: 0;
   margin: 0;

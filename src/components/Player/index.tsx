@@ -100,7 +100,7 @@ export default defineComponent({
     }
 
     const onEnded = () => {
-      if (store.state.playMode === 'loop') {
+      if (store.state.playMode === 'loop' || store.state.playList.length === 1) {
         audioInstance.value!.currentTime = 0
         audioInstance.value!.play()
         lyricRef.value?.seek(0)
