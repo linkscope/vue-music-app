@@ -3,12 +3,13 @@
  * @Author: linkscope
  * @Date: 2021-03-10 16:23:13
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-11 10:59:24
+ * @LastEditTime: 2021-03-15 23:05:31
  */
 import { defineComponent, PropType } from 'vue'
 import { createUseStyles } from 'vue-jss'
 
 import { Color, Font } from '@/assets/variables'
+import { noWrap } from '@/assets/mixin'
 import { searchMatchingType } from '../index'
 import Icon from '@/components/Icon'
 
@@ -33,6 +34,7 @@ const useStyle = createUseStyles({
     paddingLeft: 20
   },
   desc: {
+    ...(noWrap as any),
     fontSize: Font['$font-size-smaller'],
     color: Color['$color-text-dark'],
     marginTop: 10

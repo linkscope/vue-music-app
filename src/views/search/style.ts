@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-03-08 16:32:39
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-11 10:53:48
+ * @LastEditTime: 2021-03-25 16:53:35
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -17,7 +17,7 @@ const useStyle = createUseStyles({
     top: 274,
     bottom: 0,
     width: '100%',
-    overflow: 'hidden'
+    overflow: 'auto'
   },
   searchListContainer: {
     height: '100%',
@@ -38,6 +38,23 @@ const useStyle = createUseStyles({
     borderRadius: 6,
     backgroundColor: Color['$color-highlight-background'],
     fontSize: Font['$font-size-small']
+  },
+  searchHistoryContainer: {
+    position: 'relative',
+    margin: '0 20px'
+  },
+  searchHistoryTitle: {
+    display: 'flex',
+    alignItems: 'center',
+    height: 40,
+    fontSize: Font['$font-size-small'],
+    color: Color['$color-text-dark'],
+    '& .text': {
+      flex: 1
+    },
+    '& .delete': {
+      fontSize: Font['$font-size-small']
+    }
   }
 })
 

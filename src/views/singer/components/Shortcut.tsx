@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-01 14:20:43
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-02 16:44:23
+ * @LastEditTime: 2021-03-15 22:12:06
  */
 import { defineComponent, PropType, withModifiers } from 'vue'
 import { createUseStyles } from 'vue-jss'
@@ -28,13 +28,7 @@ const useStyle = createUseStyles({
     color: Color['$color-theme']
   }
 })
-/*
- * @Description:
- * @Author: linkscope
- * @Date: 2021-02-01 14:20:43
- * @LastEditors: linkscope
- * @LastEditTime: 2021-02-01 14:30:17
- */
+
 const touch = {
   startPageY: 0,
   endPageY: 0,

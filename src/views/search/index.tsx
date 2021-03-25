@@ -3,13 +3,15 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:27
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-15 10:12:32
+ * @LastEditTime: 2021-03-25 16:47:06
  */
-import { defineComponent, onMounted, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 
-import { ISong } from '@/types'
+import { ISong, IStore } from '@/types'
+import store from '@/store'
+import { getItem } from '@/utils/storage'
 import useStyle from './style'
 import {
   getHotKeyList,
@@ -26,6 +28,9 @@ import SuggestList from './components/SuggestList'
 import MatchList from './components/MatchList'
 import ScrollView from '@/components/ScrollView'
 import SongListItem from '@/components/SongList/SongListItem'
+import Icon from '@/components/Icon'
+import SearchHistoryList from './components/SearchHistoryList'
+import { Dialog } from 'vant'
 
 let T = 0
 
@@ -44,10 +49,16 @@ export type searchMatchingType = {
 
 export default defineComponent({
   name: 'Search',
+  beforeRouteEnter(to, from, next) {
+    // 进入页面时提前将searchList存入store中
+    const searchList: string[] = getItem('searchHistory') || []
+    store.commit('SET_SEARCH_HISTORY', searchList)
+    next()
+  },
   setup() {
     const classesRef = useStyle()
     const router = useRouter()
-    const store = useStore()
+    const store = useStore<IStore>()
     const searchValue = ref('')
     const isFocus = ref(false)
     const hotKeyListRef = ref<
@@ -62,6 +73,7 @@ export default defineComponent({
     const containerInstance = ref<HTMLDivElement | null>(null)
     const scrollViewInstance = ref()
     const searchInstance = ref()
+    const searchList = computed(() => store.state.searchHistory)
 
     userPlayerListHeight((playList) => {
       const bottom = playList.length > 0 ? '60px' : ''
@@ -123,6 +135,7 @@ export default defineComponent({
     }
 
     const onSearch = async (name: string) => {
+      store.dispatch('dispatchSaveSearchHistory', name)
       const { result } = await search(name)
       matchSearchList.value = normalizeMatchList(result)
       const { result: songResult } = await searchSongs(name)
@@ -236,6 +249,8 @@ export default defineComponent({
                     key={index}
                     class={classes.hotKeyItem}
                     onClick={() => {
+                      searchInstance.value.inputInstance.blur()
+                      isFocus.value = false
                       searchValue.value = item.first
                       onSearch(searchValue.value)
                     }}
@@ -244,6 +259,34 @@ export default defineComponent({
                   </li>
                 ))}
               </ul>
+            </div>
+            <div v-show={searchList.value.length} class={classes.searchHistoryContainer}>
+              <h1 class={classes.searchHistoryTitle}>
+                <span class="text">搜索历史</span>
+                <div
+                  class="delete"
+                  onClick={() =>
+                    Dialog.confirm({
+                      title: '确认清空历史搜索记录？',
+                      theme: 'round-button'
+                    }).then(() => {
+                      store.dispatch('dispatchDeleteSearchHistory')
+                    })
+                  }
+                >
+                  <Icon color="#222" icon="shanchu" />
+                </div>
+              </h1>
+              <SearchHistoryList
+                searchList={searchList.value}
+                onClick={(name) => {
+                  searchInstance.value.inputInstance.blur()
+                  isFocus.value = false
+                  searchValue.value = name
+                  onSearch(searchValue.value)
+                }}
+                onDelete={(name) => store.dispatch('dispatchDeleteSearchHistory', name)}
+              />
             </div>
           </div>
         </>

@@ -3,11 +3,12 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-15 10:21:58
+ * @LastEditTime: 2021-03-25 16:05:11
  */
 import { createStore, createLogger } from 'vuex'
 import { IStore, ISong } from '@/types'
 import { shuffleArray } from '@/utils'
+import { getItem, setItem } from '@/utils/storage'
 
 export default createStore<IStore>({
   state: {
@@ -18,7 +19,8 @@ export default createStore<IStore>({
     playList: [],
     sequenceList: [],
     playMode: 'sequence',
-    playingIndex: -1
+    playingIndex: -1,
+    searchHistory: []
   },
   mutations: {
     SET_IS_LOADING(state, isLoading: boolean) {
@@ -51,6 +53,9 @@ export default createStore<IStore>({
     },
     SET_PLAY_MODE(state, playMode: string) {
       state.playMode = playMode as any
+    },
+    SET_SEARCH_HISTORY(state, searchHistory: string[]) {
+      state.searchHistory = searchHistory
     }
   },
   actions: {
@@ -113,6 +118,27 @@ export default createStore<IStore>({
       commit('SET_PLAYING_INDEX', playingIndex)
       commit('SET_IS_FULL_SCREEN', true)
       commit('SET_IS_PLAYING', true)
+    },
+    dispatchSaveSearchHistory({ commit }, name: string) {
+      const searchList: string[] = getItem('searchHistory') || []
+      const findIndex = searchList.indexOf(name)
+      // 如果之前有该条搜索历史，删除后再添加到头部；如果超过十条记录，将最后一条记录删除
+      if (~findIndex) searchList.splice(findIndex, 1)
+      searchList.unshift(name)
+      if (searchList.length > 10) searchList.pop()
+      setItem('searchHistory', searchList)
+      commit('SET_SEARCH_HISTORY', searchList)
+    },
+    dispatchDeleteSearchHistory({ commit }, name?: string) {
+      let searchList: string[] = getItem('searchHistory') || []
+      if (name) {
+        const findIndex = searchList.indexOf(name)
+        searchList.splice(findIndex, 1)
+      } else {
+        searchList = []
+      }
+      setItem('searchHistory', searchList)
+      commit('SET_SEARCH_HISTORY', searchList)
     }
   },
   modules: {},

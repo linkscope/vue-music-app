@@ -33,6 +33,7 @@ export interface IStore {
   sequenceList: ISong[]
   playMode: 'sequence' | 'loop' | 'random'
   playingIndex: number
+  searchHistory: string[]
 }
 
 export interface IBanner {
