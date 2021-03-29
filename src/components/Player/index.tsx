@@ -12,6 +12,7 @@ import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
 import ProgressBar from './ProgressBar'
 import ProgressCircle from './ProgressCircle'
+import PlayList from '@/components/PlayList'
 
 // 默认播放顺序为下一首
 let isNext = true
@@ -51,6 +52,7 @@ export default defineComponent({
     const currentLineLyric = ref(0)
     const currentPlayLyric = ref('')
     const currentPage = ref('cd')
+    const playListPicker = ref(false)
     const percent = computed(() => currentTime.value / durationTime.value)
     const offsetPosition = computed(() => {
       const normalAlbumImgWidth = window.innerWidth * 0.8
@@ -444,6 +446,12 @@ export default defineComponent({
               </div>
               <div
                 class={classes.miniOperators}
+                onClick={() => (playListPicker.value = !playListPicker.value)}
+              >
+                <Icon class="center" icon="liebiao" color="#d93f30" />
+              </div>
+              <div
+                class={classes.miniOperators}
                 onClick={() => store.commit('SET_IS_PLAYING', !store.state.isPlaying)}
               >
                 <Icon
@@ -454,6 +462,7 @@ export default defineComponent({
               </div>
             </div>
           </Transition>
+          <PlayList v-model={playListPicker.value} />
           <audio
             ref={audioInstance}
             src={songUrl}

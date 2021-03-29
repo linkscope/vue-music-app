@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-02-19 09:44:36
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-24 09:43:10
+ * @LastEditTime: 2021-03-29 10:33:51
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -228,7 +228,7 @@ const useStyle = createUseStyles({
   },
   miniOperators: {
     flex: '0 0 30px',
-    padding: '0 20px',
+    padding: '0 10px',
     '& .center': {
       width: 30,
       height: 30
