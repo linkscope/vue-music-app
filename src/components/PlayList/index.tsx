@@ -3,15 +3,25 @@
  * @Author: linkscope
  * @Date: 2021-03-29 09:48:26
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-29 11:46:03
+ * @LastEditTime: 2021-04-04 14:16:48
  */
-import { computed, defineComponent, PropType, Transition, withModifiers, ref, watch } from 'vue'
+import {
+  computed,
+  defineComponent,
+  PropType,
+  Transition,
+  withModifiers,
+  ref,
+  watch,
+  TransitionGroup
+} from 'vue'
 import { useStore } from 'vuex'
 import { IStore, ISong } from '@/types'
 import useStyle from './style'
 
 import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
+import { Dialog } from 'vant'
 
 export default defineComponent({
   name: 'PlayList',
@@ -24,7 +34,7 @@ export default defineComponent({
     const store = useStore<IStore>()
     const classesRef = useStyle()
     const scrollViewInstance = ref()
-    const playListInstance = ref<HTMLUListElement>()
+    const playListInstance = ref()
     const picker = computed({
       get: () => props.modelValue || false,
       set: (value) => emit('update:modelValue', value)
@@ -45,12 +55,21 @@ export default defineComponent({
 
     const scrollToCurrentSong = (song: ISong) => {
       const index = store.state.playList.findIndex((item) => item.id === song.id)
-      scrollViewInstance.value.scrollToElement(playListInstance.value?.children[index], 300)
+      scrollViewInstance.value.scrollToElement(playListInstance.value?.$el.children[index], 300)
     }
 
     const selectSong = (index: number) => {
       store.commit('SET_PLAYING_INDEX', index)
       store.commit('SET_IS_PLAYING', true)
+    }
+
+    const deleteAll = () => {
+      Dialog.confirm({
+        title: '确认清空播放列表？',
+        theme: 'round-button'
+      }).then(() => {
+        store.dispatch('dispatchDeleteSong')
+      })
     }
 
     watch(picker, (value) => {
@@ -65,7 +84,7 @@ export default defineComponent({
     watch(
       () => store.getters.playingSong,
       (nextSong, previousSong) => {
-        if (!picker.value || nextSong.id === previousSong.id) return
+        if (!nextSong || !picker.value || nextSong.id === previousSong.id) return
         scrollToCurrentSong(nextSong)
       }
     )
@@ -96,13 +115,22 @@ export default defineComponent({
                   <Icon class={classes.headerIcon} color="#222" icon={store.state.playMode} />
                 </div>
                 <span class={classes.headerText}>{playModeText.value}</span>
-                <Icon class={classes.headerClear} color="#222" icon="shanchu" />
+                <div onClick={deleteAll}>
+                  <Icon class={classes.headerClear} color="#222" icon="shanchu" />
+                </div>
               </h1>
               <ScrollView ref={scrollViewInstance} data={playList} class={classes.section}>
-                <ul ref={playListInstance}>
+                <TransitionGroup
+                  ref={playListInstance}
+                  tag="ul"
+                  enterActiveClass={classes.listTransitionActive}
+                  leaveActiveClass={classes.listTransitionActive}
+                  enterFromClass={classes.listTransitionEnter}
+                  leaveToClass={classes.listTransitionEnter}
+                >
                   {playList.map((item, index) => (
                     <li
-                      key={index}
+                      key={item.id}
                       class={classes.sectionListItem}
                       onClick={() => selectSong(index)}
                     >
@@ -117,14 +145,20 @@ export default defineComponent({
                         icon="xihuan"
                         color="#d93f30"
                       />
-                      <Icon
-                        class={classes.sectionListItemDeleteIcon}
-                        icon="shanchu3"
-                        color="#d93f30"
-                      />
+                      <div
+                        onClick={withModifiers(() => store.dispatch('dispatchDeleteSong', item), [
+                          'stop'
+                        ])}
+                      >
+                        <Icon
+                          class={classes.sectionListItemDeleteIcon}
+                          icon="shanchu3"
+                          color="#d93f30"
+                        />
+                      </div>
                     </li>
                   ))}
-                </ul>
+                </TransitionGroup>
               </ScrollView>
               <div class={classes.close} onClick={() => (picker.value = false)}>
                 关闭

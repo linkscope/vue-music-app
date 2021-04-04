@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-03-08 16:32:39
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-25 16:53:35
+ * @LastEditTime: 2021-04-04 13:45:47
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -20,8 +20,14 @@ const useStyle = createUseStyles({
     overflow: 'auto'
   },
   searchListContainer: {
+    position: 'fixed',
+    top: 274,
+    left: 0,
     height: '100%',
-    overflow: 'hidden'
+    width: '100%',
+    overflow: 'hidden',
+    backgroundColor: Color.$white,
+    zIndex: 100
   },
   hotKeyContainer: {
     margin: '0 20px 20px 20px'

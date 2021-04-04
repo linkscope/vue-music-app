@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-25 16:05:11
+ * @LastEditTime: 2021-04-04 14:22:15
  */
 import { createStore, createLogger } from 'vuex'
 import { IStore, ISong } from '@/types'
@@ -139,6 +139,38 @@ export default createStore<IStore>({
       }
       setItem('searchHistory', searchList)
       commit('SET_SEARCH_HISTORY', searchList)
+    },
+    dispatchDeleteSong({ commit, state }, song: ISong) {
+      if (!song) {
+        commit('SET_PLAYING_INDEX', -1)
+        commit('SET_PLAY_LIST', [])
+        commit('SET_SEQUENCE_LIST', [])
+        commit('SET_IS_PLAYING', false)
+        return
+      }
+
+      const playList = state.playList.slice()
+      const sequenceList = state.sequenceList.slice()
+
+      const findIndex = playList.findIndex((item) => song.id === item.id)
+      playList.splice(findIndex, 1)
+      sequenceList.splice(
+        sequenceList.findIndex((item) => song.id === item.id),
+        1
+      )
+
+      if (state.playingIndex > findIndex || state.playingIndex === playList.length) {
+        commit('SET_PLAYING_INDEX', state.playingIndex - 1)
+      }
+
+      commit('SET_PLAY_LIST', playList)
+      commit('SET_SEQUENCE_LIST', sequenceList)
+
+      if (!playList.length) {
+        commit('SET_IS_PLAYING', false)
+      } else {
+        commit('SET_IS_PLAYING', true)
+      }
     }
   },
   modules: {},

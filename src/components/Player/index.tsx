@@ -257,6 +257,10 @@ export default defineComponent({
     watch(
       () => store.getters.playingSong,
       (nextSong: ISong, prevSong: ISong) => {
+        if (!nextSong) {
+          playListPicker.value = false
+          return
+        }
         if (!prevSong || nextSong.id !== prevSong.id) {
           // 解决手机浏览器从后台切换至前台发生的js延迟问题
           setTimeout(() => {

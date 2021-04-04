@@ -93,6 +93,12 @@ const useStyle = createUseStyles({
     '& .wrapper': {
       transform: 'translate3d(0, 100%, 0)'
     }
+  },
+  listTransitionActive: {
+    transition: 'all 0.1s linear'
+  },
+  listTransitionEnter: {
+    height: 0
   }
 })
 
