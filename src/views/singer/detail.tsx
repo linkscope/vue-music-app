@@ -12,7 +12,7 @@ import SongList from '@/components/SongList'
  * @Author: linkscope
  * @Date: 2021-02-03 10:20:12
  * @LastEditors: linkscope
- * @LastEditTime: 2021-02-24 11:18:53
+ * @LastEditTime: 2021-04-04 23:28:35
  */
 export default defineComponent({
   name: 'SingerDetail',
@@ -31,7 +31,9 @@ export default defineComponent({
 
     const getSong = async () => {
       if (!store.state.singerInfo) {
-        router.back()
+        router.push({
+          name: 'Singer'
+        })
         return
       }
       const { songs, total } = await getSongList(singerInfo.value!.id)

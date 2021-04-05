@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 17:29:27
  * @LastEditors: linkscope
- * @LastEditTime: 2021-03-25 16:47:06
+ * @LastEditTime: 2021-04-05 12:27:16
  */
 import { computed, defineComponent, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -78,6 +78,8 @@ export default defineComponent({
     userPlayerListHeight((playList) => {
       const bottom = playList.length > 0 ? '60px' : ''
       containerInstance.value!.style.bottom = bottom
+      scrollViewInstance.value!.$el.style.bottom = bottom
+      scrollViewInstance.value!.$el.style.height = `calc(100% - 334px)`
       scrollViewInstance.value!.onRefresh()
     })
 

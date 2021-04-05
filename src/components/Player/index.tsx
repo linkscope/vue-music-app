@@ -12,7 +12,7 @@ import Icon from '@/components/Icon'
 import ScrollView from '@/components/ScrollView'
 import ProgressBar from './ProgressBar'
 import ProgressCircle from './ProgressCircle'
-import PlayList from '@/components/PlayList'
+import PlayList from './components/PlayList'
 
 // 默认播放顺序为下一首
 let isNext = true
@@ -112,12 +112,12 @@ export default defineComponent({
     }
 
     // 校验音乐是否可用；获取音乐专辑封面和url播放路径
-    const getSong = async (id: number, isNext = true) => {
+    const getSong = async (song: ISong, isNext = true) => {
       try {
-        await checkSong(id)
-        const { data } = await getSongUrl(id)
-        const { songs } = await getSongDetail(id.toString())
-        const { lrc, nolyric } = await getLyric(id)
+        await checkSong(song.id)
+        const { data } = await getSongUrl(song.id)
+        const { songs } = await getSongDetail(song.id.toString())
+        const { lrc, nolyric } = await getLyric(song.id)
         // 切换歌曲时把之前的歌词计时器关闭 防止出现抖动现象
         lyricRef.value?.stop()
         if (!nolyric) {
@@ -141,6 +141,7 @@ export default defineComponent({
         }
         songRef.value = songs[0]
         songUrlRef.value = data[0].url
+        store.dispatch('dispatchSavePlayHistory', song)
       } catch {
         isNext ? onNext() : onPrevious()
       }
@@ -264,7 +265,7 @@ export default defineComponent({
         if (!prevSong || nextSong.id !== prevSong.id) {
           // 解决手机浏览器从后台切换至前台发生的js延迟问题
           setTimeout(() => {
-            getSong(nextSong.id, isNext)
+            getSong(nextSong, isNext)
           }, 1000)
         }
       }

@@ -34,6 +34,7 @@ export interface IStore {
   playMode: 'sequence' | 'loop' | 'random'
   playingIndex: number
   searchHistory: string[]
+  playHistory: ISong[]
 }
 
 export interface IBanner {
@@ -84,6 +85,7 @@ export interface ISong {
     name: string
     picUrl?: string
   }
+  artists: ISinger[]
 }
 
 export interface IRank {

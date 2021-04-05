@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-03-08 16:32:39
  * @LastEditors: linkscope
- * @LastEditTime: 2021-04-04 13:45:47
+ * @LastEditTime: 2021-04-05 12:18:39
  */
 import { createUseStyles } from 'vue-jss'
 import { Color, Font } from '@/assets/variables'
@@ -23,7 +23,7 @@ const useStyle = createUseStyles({
     position: 'fixed',
     top: 274,
     left: 0,
-    height: '100%',
+    height: 'calc(100% - 274px)',
     width: '100%',
     overflow: 'hidden',
     backgroundColor: Color.$white,

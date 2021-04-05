@@ -3,7 +3,7 @@
  * @Author: linkscope
  * @Date: 2021-01-28 13:18:34
  * @LastEditors: linkscope
- * @LastEditTime: 2021-04-04 14:22:15
+ * @LastEditTime: 2021-04-04 23:02:53
  */
 import { createStore, createLogger } from 'vuex'
 import { IStore, ISong } from '@/types'
@@ -20,7 +20,8 @@ export default createStore<IStore>({
     sequenceList: [],
     playMode: 'sequence',
     playingIndex: -1,
-    searchHistory: []
+    searchHistory: [],
+    playHistory: []
   },
   mutations: {
     SET_IS_LOADING(state, isLoading: boolean) {
@@ -56,6 +57,9 @@ export default createStore<IStore>({
     },
     SET_SEARCH_HISTORY(state, searchHistory: string[]) {
       state.searchHistory = searchHistory
+    },
+    SET_PLAY_HISTORY(state, playHistory: ISong[]) {
+      state.playHistory = playHistory
     }
   },
   actions: {
@@ -171,6 +175,31 @@ export default createStore<IStore>({
       } else {
         commit('SET_IS_PLAYING', true)
       }
+    },
+    dispatchAddSong({ state, commit }, song: ISong) {
+      const playList = state.playList.slice()
+      const sequenceList = state.sequenceList.slice()
+
+      const playListIndex = playList.findIndex((item) => item.id === song.id)
+      if (~playListIndex) playList.splice(playListIndex, 1)
+      const sequenceListIndex = sequenceList.findIndex((item) => item.id === song.id)
+      if (~sequenceListIndex) sequenceList.splice(sequenceListIndex, 1)
+
+      playList.push(song)
+      sequenceList.push(song)
+
+      commit('SET_PLAY_LIST', playList)
+      commit('SET_SEQUENCE_LIST', sequenceList)
+      commit('SET_PLAYING_INDEX', playList.length - 1)
+      commit('SET_IS_PLAYING', true)
+    },
+    dispatchSavePlayHistory({ commit }, song: ISong) {
+      const playHistory: ISong[] = getItem('playHistory') || []
+      const findIndex = playHistory.findIndex((item) => item.id === song.id)
+      if (~findIndex) playHistory.splice(findIndex, 1)
+      playHistory.unshift(song)
+      setItem('playHistory', playHistory)
+      commit('SET_PLAY_HISTORY', playHistory)
     }
   },
   modules: {},
