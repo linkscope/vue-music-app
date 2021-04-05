@@ -84,10 +84,6 @@ const useStyle = createUseStyles({
     fontSize: Font['$font-size-small'],
     color: Color['$color-text-dark']
   },
-  sectionListItemFavoriteIcon: {
-    margin: '0 15px',
-    fontSize: Font['$font-size-big']
-  },
   sectionListItemDeleteIcon: {
     fontSize: Font['$font-size-big']
   },
@@ -266,12 +262,8 @@ export default defineComponent({
                           color="#d93f30"
                         />
                         <span class={classes.sectionListItemText}>{item.name}</span>
-                        <Icon
-                          class={classes.sectionListItemFavoriteIcon}
-                          icon="xihuan"
-                          color="#d93f30"
-                        />
                         <div
+                          style="margin: 0 15px"
                           onClick={withModifiers(() => store.dispatch('dispatchDeleteSong', item), [
                             'stop'
                           ])}

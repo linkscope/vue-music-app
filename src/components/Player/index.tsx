@@ -424,7 +424,7 @@ export default defineComponent({
                   <div onClick={onNext}>
                     <Icon icon="xiayishou" />
                   </div>
-                  <Icon icon="xihuan" />
+                  <Icon icon="" />
                 </div>
               </div>
             </div>
