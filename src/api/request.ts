@@ -27,6 +27,7 @@ request.interceptors.response.use(
     return data
   },
   (error) => {
+    store.commit('SET_IS_LOADING', false)
     const message: string = error.response.data.message
     if (~message.indexOf('暂无版权')) {
       Notify({
@@ -42,7 +43,6 @@ request.interceptors.response.use(
         location.reload()
       })
     }
-    store.commit('SET_IS_LOADING', false)
     return Promise.reject(message)
   }
 )

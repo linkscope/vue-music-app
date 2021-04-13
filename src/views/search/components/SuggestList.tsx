@@ -16,7 +16,8 @@ import ScrollView from '@/components/ScrollView'
 const useStyle = createUseStyles({
   container: {
     height: '100%',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    zIndex: 150
   },
   list: {
     padding: '0 30px'

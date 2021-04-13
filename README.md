@@ -22,4 +22,4 @@ yarn
 yarn serve
 ```
 
-[线上地址](http://81.70.10.185:2000/)
+[线上地址](https://music.linkscope.cn)

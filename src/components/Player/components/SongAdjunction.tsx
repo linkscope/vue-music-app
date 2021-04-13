@@ -228,7 +228,7 @@ export default defineComponent({
               }}
             />
             <ScrollView
-              v-show={searchList.value.length}
+              v-show={!isFocus.value && searchList.value.length}
               class={classes.searchListContainer}
               data={searchList.value}
               listenScroll
