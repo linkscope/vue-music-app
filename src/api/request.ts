@@ -28,7 +28,7 @@ request.interceptors.response.use(
   },
   (error) => {
     store.commit('SET_IS_LOADING', false)
-    const message: string = error.response.data.message
+    const message: string = error.response?.data?.message
     if (~message.indexOf('暂无版权')) {
       Notify({
         type: 'danger',
